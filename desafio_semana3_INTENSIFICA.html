@@ -74,6 +74,8 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
 .btn:active{transform:scale(.97);opacity:.9}
 .btn-primary{background:rgba(255,255,255,0.2);color:var(--txt);border:1px solid rgba(255,255,255,0.3)}
 .btn-ghost{flex:none;width:52px;background:var(--card);color:var(--txt2);border:1px solid var(--borda);font-size:.85rem}
+.btn-reset{flex:none;width:52px;background:var(--card);color:var(--txt2);border:1px solid var(--borda);border-radius:10px;font-size:.85rem;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;padding:14px}
+.btn-reset:active{transform:scale(.97);opacity:.9}
 
 .lista{width:100%;background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--borda);margin-bottom:20px}
 .lista-titulo{padding:11px 18px;font-size:.6rem;color:var(--txt3);letter-spacing:3px;font-weight:600;border-bottom:1px solid var(--borda);text-transform:uppercase}
@@ -195,6 +197,7 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
     <div class="btn-row">
       <button class="btn btn-ghost" onclick="anteriorEx()">&#8592;</button>
       <button class="btn btn-primary" id="btn-principal" onclick="acaoPrincipal()">Iniciar</button>
+      <button class="btn-reset" onclick="reiniciarTimer()" title="Reiniciar">↺</button>
       <button class="btn btn-ghost" onclick="proximoEx()">&#8594;</button>
     </div>
     <button class="btn-pular" id="btn-pular" onclick="pularFase()"></button>
@@ -1150,6 +1153,15 @@ function iT(){
 }
 
 function pT(){clearInterval(iv);tr=false;const b=document.getElementById('btn-principal');if(b)b.textContent='Iniciar';}
+
+function reiniciarTimer(){
+  pT(); // para o timer
+  // Resetar para o tempo original do exercício atual
+  ts = fase==='aq' ? 30 : T[ta].ts;
+  tt = ts;
+  uD();
+  document.getElementById('timer-status').textContent='Pressione iniciar quando estiver pronta';
+}
 
 function uD(){
   const m=Math.floor(ts/60),s=ts%60;
