@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Joga Pra Cima · Semana 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g1:#380089;--g2:#843b1b;
+  --card:rgba(255,255,255,0.10);
+  --card2:rgba(255,255,255,0.17);
+  --borda:rgba(255,255,255,0.18);
+  --txt:#f5eaff;--txt2:#d4b8f0;--txt3:#b89ad4;
+}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1) 0%,var(--g2) 100%) fixed;color:var(--txt);min-height:100vh}
+
+/* HEADER CSS */
+.header-wrap{width:100%;text-align:center;padding:28px 20px 18px;background:rgba(0,0,0,0.2);border-bottom:1px solid rgba(255,255,255,0.1)}
+.header-logo{font-size:2.8rem;font-weight:400;color:#fff;letter-spacing:4px;line-height:1}
+.header-logo span{color:#fff}
+.header-tagline{font-size:.65rem;color:var(--txt3);letter-spacing:4px;font-weight:500;margin-top:6px;text-transform:uppercase}
+.header-sub{font-size:1.1rem;letter-spacing:3px;font-weight:700;color:rgba(255,255,255,0.95);margin-top:10px;text-transform:uppercase}
+
+#tela-inicio{display:flex;flex-direction:column;align-items:center;min-height:100vh}
+.nivel-section{width:100%;max-width:480px;padding:22px 20px 8px}
+.slabel{font-size:.82rem;color:var(--txt2);letter-spacing:2px;font-weight:600;display:block;margin-bottom:12px;text-transform:uppercase}
+.nivel-bar{display:flex;gap:8px}
+.nivel-btn{flex:1;padding:10px 6px;border:1.5px solid var(--borda);border-radius:8px;background:transparent;color:var(--txt2);font-size:.72rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s}
+.nivel-btn.active{background:rgba(255,255,255,0.22);color:var(--txt);border-color:rgba(255,255,255,0.4)}
+
+.treinos-grid{width:100%;max-width:480px;padding:14px 20px 32px;display:flex;flex-direction:column;gap:10px}
+.treino-card{background:var(--card);border-radius:14px;padding:16px 18px;border:1px solid var(--borda);cursor:pointer;display:flex;align-items:center;gap:16px;transition:all .2s}
+.treino-card:active{transform:scale(.99);background:var(--card2)}
+.treino-num{width:48px;height:48px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.treino-info h3{font-size:.92rem;font-weight:700;color:var(--txt)}
+.treino-info p{font-size:.7rem;color:var(--txt3);margin-top:3px;font-weight:500}
+.treino-arrow{color:var(--borda);font-size:1.2rem;margin-left:auto}
+
+#tela-instrucao{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 20px;gap:0}
+.instr-wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:16px}
+.treino-badge-wrap{text-align:center;margin-bottom:12px}
+.treino-badge{display:inline-block;font-size:.88rem;color:rgba(255,255,255,0.8);letter-spacing:2px;font-weight:600;text-transform:uppercase}
+.instr-tipo{font-size:.88rem;color:var(--txt2);letter-spacing:2px;font-weight:700;text-transform:uppercase;text-align:center}
+.instr-titulo{font-size:1.25rem;font-weight:700;color:var(--txt);text-align:center;line-height:1.3}
+.instr-cards{display:flex;flex-direction:column;gap:10px}
+.instr-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:14px 16px;display:flex;align-items:flex-start;gap:14px}
+.instr-icon{font-size:1.3rem;flex-shrink:0;margin-top:1px}
+.instr-text{font-size:.82rem;color:var(--txt2);line-height:1.5;font-weight:400}
+.instr-text strong{color:var(--txt);font-weight:600}
+.btn-comecar{width:100%;padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:var(--txt);font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+
+#tela-treino{display:none;flex-direction:column;min-height:100vh}
+.treino-header{width:100%;background:rgba(0,0,0,0.25);padding:14px 18px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;backdrop-filter:blur(8px);border-bottom:1px solid var(--borda)}
+.btn-voltar{background:none;border:none;color:var(--txt);font-size:1.3rem;cursor:pointer;padding:4px;opacity:.8;font-family:'Poppins',sans-serif}
+.th-info h1{font-size:1.1rem;font-weight:700;color:var(--txt);line-height:1.2}
+.th-info p{font-size:.88rem;color:var(--txt3);margin-top:4px;font-weight:600}
+
+.treino-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 18px;gap:12px;max-width:480px;width:100%;margin:0 auto}
+
+.progresso{display:flex;gap:5px;width:100%}
+.prog-dot{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.15);transition:all .3s}
+.prog-dot.done{background:rgba(255,255,255,0.5)}
+.prog-dot.current{background:#fff}
+
+.ex-card{width:100%;background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--borda)}
+.ex-header{padding:16px 18px 12px}
+.ex-numero{font-size:.9rem;color:var(--txt3);font-weight:600;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}
+.ex-nome{font-size:1.05rem;font-weight:700;color:var(--txt);line-height:1.3}
+.ex-instrucao{font-size:.76rem;color:var(--txt2);margin-top:6px;font-weight:500}
+.video-wrap{position:relative;width:100%;padding-bottom:56.25%;background:rgba(0,0,0,0.4)}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-placeholder{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:12px}
+.play-circle{width:58px;height:58px;border:1.5px solid rgba(255,255,255,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08)}
+.play-circle svg{width:20px;height:20px;fill:#fff;margin-left:3px}
+.video-placeholder p{font-size:.68rem;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-weight:400;letter-spacing:2px;text-transform:uppercase}
+
+.timer-section{width:100%;background:var(--card);border-radius:16px;padding:20px 18px;text-align:center;border:1px solid var(--borda)}
+.timer-label{font-size:.6rem;color:var(--txt3);letter-spacing:3px;font-weight:600;margin-bottom:14px;text-transform:uppercase}
+.timer-ring{position:relative;width:130px;height:130px;margin:0 auto 12px}
+.timer-ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(255,255,255,0.12);stroke-width:4}
+.ring-prog{fill:none;stroke-width:4;stroke-linecap:round;stroke:rgba(255,255,255,0.85);transition:stroke-dashoffset .9s linear}
+.ring-prog.alerta{stroke:#ff6b6b}
+.timer-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.1rem;font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.timer-num.alerta{color:#ff6b6b}
+.timer-status{font-size:.68rem;color:var(--txt3);font-weight:500;letter-spacing:1px;text-transform:uppercase}
+
+.btn-row{display:flex;gap:10px;width:100%}
+.btn{flex:1;padding:14px;border-radius:10px;border:none;font-size:.8rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:.5px;text-transform:uppercase;transition:all .15s}
+.btn:active{transform:scale(.97);opacity:.9}
+.btn-primary{background:rgba(255,255,255,0.2);color:var(--txt);border:1px solid rgba(255,255,255,0.3)}
+.btn-ghost{flex:none;width:52px;background:var(--card);color:var(--txt2);border:1px solid var(--borda);font-size:.85rem}
+.btn-reset{flex:none;width:52px;background:var(--card);color:var(--txt2);border:1px solid var(--borda);border-radius:10px;font-size:.85rem;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;padding:14px}
+.btn-reset:active{transform:scale(.97);opacity:.9}
+
+.btn-pular{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.4);font-size:.65rem;font-weight:500;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:1px;text-transform:uppercase;display:none}
+
+.lista{width:100%;background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--borda);margin-bottom:20px}
+.lista-titulo{padding:11px 18px;font-size:.6rem;color:var(--txt3);letter-spacing:3px;font-weight:600;border-bottom:1px solid var(--borda);text-transform:uppercase}
+.lista-item{display:flex;align-items:center;padding:12px 18px;gap:14px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;transition:background .15s}
+.lista-item:last-child{border-bottom:none}
+.lista-item:active,.lista-item.current{background:var(--card2)}
+.lista-item.done{opacity:.35}
+.lista-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;color:var(--txt)}
+.lista-item.current .lista-num{background:rgba(255,255,255,.3)}
+.lista-nome{font-size:.8rem;font-weight:600;color:var(--txt)}
+.lista-reps{font-size:.67rem;color:var(--txt3);margin-top:2px;font-weight:400}
+
+#tela-final{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px;gap:14px;min-height:100vh}
+.final-logo{font-size:2.2rem;font-weight:400;color:#fff;letter-spacing:4px;margin-bottom:8px}
+.final-logo span{color:#fff}
+.final-icon{width:68px;height:68px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem}
+#tela-final h2{font-size:1.35rem;color:var(--txt);font-weight:700}
+#tela-final p{color:var(--txt2);font-size:.85rem;line-height:1.7;max-width:300px}
+.btn-final{width:100%;max-width:300px;padding:15px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);color:var(--txt);font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-top:8px}
+
+.countdown-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);display:none;align-items:center;justify-content:center;z-index:100}
+.countdown-num{font-size:8rem;font-weight:800;color:#fff;font-family:'Poppins',sans-serif;animation:pop .8s ease-out}
+@keyframes pop{0%{transform:scale(0.5);opacity:0}50%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<div id="tela-inicio">
+  <div class="header-wrap">
+    <div class="header-logo">LIPO<span>FIT</span></div>
+    <div class="header-tagline">Joga Pra Cima · Glúteos &amp; Pernas</div>
+    <div class="header-sub" id="header-sub">SEMANA 1</div>
+  </div>
+  <div class="nivel-section">
+    <span class="slabel">Escolha o seu nível</span>
+    <div class="nivel-bar">
+      <button class="nivel-btn active" onclick="setNivel(0)">Iniciante</button>
+      <button class="nivel-btn" onclick="setNivel(1)">Intermediária</button>
+      <button class="nivel-btn" onclick="setNivel(2)">Avançada</button>
+    </div>
+  </div>
+  <div class="treinos-grid" id="treinos-grid"></div>
+</div>
+
+<div id="tela-instrucao">
+  <div class="instr-wrap">
+    <div class="treino-badge-wrap"><div id="treino-badge" class="treino-badge"></div></div>
+    <div class="instr-tipo" id="instr-tipo"></div>
+    <div class="instr-titulo" id="instr-titulo"></div>
+    <div class="instr-cards" id="instr-cards"></div>
+    <button class="btn-comecar" id="btn-comecar" onclick="comecarTreino()">Vamos treinar &#8594;</button>
+  </div>
+</div>
+
+<div id="tela-treino">
+  <div class="treino-header">
+    <button class="btn-voltar" onclick="voltarInicio()">&#8592;</button>
+    <div class="th-info">
+      <h1 id="th-titulo">—</h1>
+      <p id="th-subtitulo">—</p>
+    </div>
+  </div>
+  <div class="treino-body">
+    <div class="progresso" id="progresso"></div>
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-numero" id="ex-numero"></div>
+        <div class="ex-nome" id="ex-nome"></div>
+        <div class="ex-instrucao" id="ex-instrucao"></div>
+      </div>
+      <div class="video-wrap">
+        <div class="video-placeholder" id="video-placeholder" onclick="abrirVideo()">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <p>Ver exercício</p>
+        </div>
+        <iframe id="video-frame" class="hidden" allow="autoplay;encrypted-media" allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="timer-section">
+      <div class="timer-label" id="timer-label">Atividade</div>
+      <div class="timer-ring">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle class="ring-bg" cx="65" cy="65" r="58"/>
+          <circle class="ring-prog" id="timer-progress" cx="65" cy="65" r="58" stroke-dasharray="364.4" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-display">0:45</div>
+      </div>
+      <div class="timer-status" id="timer-status">Pressione iniciar quando estiver pronta</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="anteriorEx()">&#8592;</button>
+      <button class="btn btn-primary" id="btn-principal" onclick="acaoPrincipal()">Iniciar</button>
+      <button class="btn-reset" onclick="reiniciarTimer()" title="Reiniciar">&#x21BA;</button>
+      <button class="btn btn-ghost" onclick="proximoEx()">&#8594;</button>
+    </div>
+    <button class="btn-pular" id="btn-pular" onclick="pularFase()"></button>
+    <div class="lista">
+      <div class="lista-titulo">Exercícios do treino</div>
+      <div id="lista-items"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tela-final">
+  <div class="final-logo">LIPO<span>FIT</span></div>
+  <div class="final-icon">🍑</div>
+  <h2>Treino concluído!</h2>
+  <p>Parabéns! Continue firme — cada treino te aproxima do resultado.</p>
+  <button class="btn-final" onclick="voltarInicio()">&#8592; Voltar aos treinos</button>
+</div>
+
+<div class="countdown-overlay" id="countdown-overlay">
+  <div class="countdown-num" id="countdown-num">3</div>
+</div>
+
+<script>
+const T = [
+  {
+    "titulo": "🍑 EMPINA",
+    "nome": "EMPINA",
+    "subtitulo": "45s × 15s · 4 rounds",
+    "descricao": "Glúteo Posterior",
+    "num": "01",
+    "fmt": "45X15",
+    "ts": 45,
+    "tl": "Atividade",
+    "semanaLabel": "JOGA PRA CIMA · SEMANA 1",
+    "semNum": 1,
+    "aq": [
+      {
+        "nome": "ELEVAÇÃO DE QUADRIL",
+        "yt": "_AAek8IPgug"
+      },
+      {
+        "nome": "BOM DIA COM MÃOS ATRÁS DA CABEÇA",
+        "yt": "ASt1p94wolA"
+      },
+      {
+        "nome": "CORRIDA NO LUGAR",
+        "yt": "BgHUodCYv7k"
+      }
+    ],
+    "n": [
+      [
+        {
+          "nome": "ELEVAÇÃO DE QUADRIL COM PESO",
+          "reps": "45 segundos",
+          "yt": "_AAek8IPgug"
+        },
+        {
+          "nome": "LEVANTAMENTO TERRA COM PESO",
+          "reps": "45 segundos",
+          "yt": "wB8Og0OQmvk"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA UNILATERAL NO BANCO",
+          "reps": "45 segundos lado direito",
+          "yt": "orJv-vO-la4"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA UNILATERAL NO BANCO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "orJv-vO-la4"
+        },
+        {
+          "nome": "AGACHAMENTO LIVRE SENTANDO NO BANCO",
+          "reps": "45 segundos",
+          "yt": "KnGNy0TRnY4"
+        }
+      ],
+      [
+        {
+          "nome": "ELEVAÇÃO PÉLVICA COM PESO NO BANCO",
+          "reps": "45 segundos",
+          "yt": "PHY1HdGQzwQ"
+        },
+        {
+          "nome": "LEVANTAMENTO TERRA COM PESO",
+          "reps": "45 segundos",
+          "yt": "wB8Og0OQmvk"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA UNILATERAL NO BANCO",
+          "reps": "45 segundos lado direito",
+          "yt": "orJv-vO-la4"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA UNILATERAL NO BANCO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "orJv-vO-la4"
+        },
+        {
+          "nome": "AGACHAMENTO COM PESO",
+          "reps": "45 segundos",
+          "yt": "fplHziPpIkA"
+        }
+      ],
+      [
+        {
+          "nome": "ELEVAÇÃO PÉLVICA COM PESO NO BANCO",
+          "reps": "45 segundos",
+          "yt": "PHY1HdGQzwQ"
+        },
+        {
+          "nome": "LEVANTAMENTO TERRA SUMO COM PESO",
+          "reps": "45 segundos",
+          "yt": "oE8C2yDGR9A"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA UNILATERAL NO BANCO",
+          "reps": "45 segundos lado direito",
+          "yt": "orJv-vO-la4"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA UNILATERAL NO BANCO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "orJv-vO-la4"
+        },
+        {
+          "nome": "AGACHAMENTO COM PESO",
+          "reps": "45 segundos",
+          "yt": "fplHziPpIkA"
+        }
+      ]
+    ]
+  },
+  {
+    "titulo": "💪 FIRMA",
+    "nome": "FIRMA",
+    "subtitulo": "45s × 15s · 4 rounds",
+    "descricao": "Glúteo Lateral + Pernas",
+    "num": "02",
+    "fmt": "45X15",
+    "ts": 45,
+    "tl": "Atividade",
+    "semanaLabel": "JOGA PRA CIMA · SEMANA 1",
+    "semNum": 1,
+    "aq": [
+      {
+        "nome": "AGACHAMENTO SUMO COM PESO CORPORAL",
+        "yt": "fplHziPpIkA"
+      },
+      {
+        "nome": "ELEVAÇÃO DE QUADRIL COM MARCHA",
+        "yt": "FWa5HQnZJu8"
+      },
+      {
+        "nome": "CORRIDA NO LUGAR",
+        "yt": "BgHUodCYv7k"
+      }
+    ],
+    "n": [
+      [
+        {
+          "nome": "AGACHAMENTO SUMO COM PESO CORPORAL",
+          "reps": "45 segundos",
+          "yt": "fplHziPpIkA"
+        },
+        {
+          "nome": "AFUNDO CURTINHO COM APOIO",
+          "reps": "45 segundos lado direito",
+          "yt": "qijPKbtRAxw"
+        },
+        {
+          "nome": "AFUNDO CURTINHO COM APOIO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "qijPKbtRAxw"
+        },
+        {
+          "nome": "OSTRA NA PRANCHA LATERAL",
+          "reps": "45 segundos lado direito",
+          "yt": "JoSXAjRRaLY"
+        },
+        {
+          "nome": "OSTRA NA PRANCHA LATERAL",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "JoSXAjRRaLY"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO SUMO COM PESO",
+          "reps": "45 segundos",
+          "yt": "fplHziPpIkA"
+        },
+        {
+          "nome": "AFUNDO CURTINHO",
+          "reps": "45 segundos lado direito",
+          "yt": "b6BXRjq9Wj4"
+        },
+        {
+          "nome": "AFUNDO CURTINHO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "b6BXRjq9Wj4"
+        },
+        {
+          "nome": "OSTRA NA PRANCHA LATERAL",
+          "reps": "45 segundos lado direito",
+          "yt": "JoSXAjRRaLY"
+        },
+        {
+          "nome": "OSTRA NA PRANCHA LATERAL",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "JoSXAjRRaLY"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO SUMO COM PESO",
+          "reps": "45 segundos",
+          "yt": "fplHziPpIkA"
+        },
+        {
+          "nome": "AGACHAMENTO COSSACK COM PESO",
+          "reps": "45 segundos lado direito",
+          "yt": "7cJ3jERFRp4"
+        },
+        {
+          "nome": "AGACHAMENTO COSSACK COM PESO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "7cJ3jERFRp4"
+        },
+        {
+          "nome": "OSTRA NA PRANCHA LATERAL",
+          "reps": "45 segundos lado direito",
+          "yt": "JoSXAjRRaLY"
+        },
+        {
+          "nome": "OSTRA NA PRANCHA LATERAL",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "JoSXAjRRaLY"
+        }
+      ]
+    ]
+  },
+  {
+    "titulo": "🔥 DETONA",
+    "nome": "DETONA",
+    "subtitulo": "40s × 20s · 4 rounds",
+    "descricao": "Full Glúteo + Queima",
+    "num": "03",
+    "fmt": "40X20",
+    "ts": 40,
+    "tl": "Atividade",
+    "semanaLabel": "JOGA PRA CIMA · SEMANA 1",
+    "semNum": 1,
+    "aq": [
+      {
+        "nome": "ELEVAÇÃO DE QUADRIL",
+        "yt": "_AAek8IPgug"
+      },
+      {
+        "nome": "ESCALADOR ADAPTADO",
+        "yt": "https://youtube.com/shorts/k1o4DH7FjKA"
+      },
+      {
+        "nome": "POLICHINELOS SEM IMPACTO",
+        "yt": "xtP-2XQIGqs"
+      }
+    ],
+    "n": [
+      [
+        {
+          "nome": "AGACHAMENTO COM SALTO SEM IMPACTO",
+          "reps": "40 segundos",
+          "yt": "XdAx6NHbFiQ"
+        },
+        {
+          "nome": "SUBIDA NA CAIXA SEM PESO",
+          "reps": "40 segundos lado direito",
+          "yt": "yHRN-Mm8I_w"
+        },
+        {
+          "nome": "SUBIDA NA CAIXA SEM PESO",
+          "reps": "40 segundos lado esquerdo",
+          "yt": "yHRN-Mm8I_w"
+        },
+        {
+          "nome": "AFUNDO REVERSO SEM PESO",
+          "reps": "40 segundos",
+          "yt": "2jYCNvcxqH8"
+        },
+        {
+          "nome": "ISOMETRIA DE AGACHAMENTO",
+          "reps": "40 segundos",
+          "yt": "hpbopBMFSo8"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO COM SALTO COM PESO",
+          "reps": "40 segundos",
+          "yt": "lPk7trWnC0w"
+        },
+        {
+          "nome": "SUBIDA NA CAIXA COM PESO",
+          "reps": "40 segundos lado direito",
+          "yt": "2_7DJsuJCIk"
+        },
+        {
+          "nome": "SUBIDA NA CAIXA COM PESO",
+          "reps": "40 segundos lado esquerdo",
+          "yt": "2_7DJsuJCIk"
+        },
+        {
+          "nome": "AFUNDO REVERSO COM PESO",
+          "reps": "40 segundos",
+          "yt": "2jYCNvcxqH8"
+        },
+        {
+          "nome": "ISOMETRIA DE AGACHAMENTO",
+          "reps": "40 segundos",
+          "yt": "hpbopBMFSo8"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO COM SALTO COM PESO",
+          "reps": "40 segundos",
+          "yt": "lPk7trWnC0w"
+        },
+        {
+          "nome": "SUBIDA NA CAIXA COM PESO",
+          "reps": "40 segundos lado direito",
+          "yt": "2_7DJsuJCIk"
+        },
+        {
+          "nome": "SUBIDA NA CAIXA COM PESO",
+          "reps": "40 segundos lado esquerdo",
+          "yt": "2_7DJsuJCIk"
+        },
+        {
+          "nome": "AFUNDO REVERSO COM PESO",
+          "reps": "40 segundos",
+          "yt": "2jYCNvcxqH8"
+        },
+        {
+          "nome": "ISOMETRIA DE AGACHAMENTO",
+          "reps": "40 segundos",
+          "yt": "hpbopBMFSo8"
+        }
+      ]
+    ]
+  }
+];
+
+const INSTRUCOES = {
+  AQUECIMENTO: {
+    tipo: "Aquecimento · 3 minutos",
+    titulo: "Prepare o corpo para o treino",
+    itens: [
+      { icon: "🔥", texto: "<strong>2 rounds</strong> com <strong>30 segundos</strong> em cada exercício." },
+      { icon: "💨", texto: "Respire fundo e <strong>aqueça as articulações</strong> com movimentos suaves." },
+      { icon: "🍑", texto: "Já ative o glúteo — <strong>sinta o músculo trabalhando</strong> desde o aquecimento." },
+      { icon: "▶️", texto: "O timer avança automaticamente. <strong>Toque no vídeo</strong> para ver como fazer." },
+    ]
+  },
+  "45X15": {
+    tipo: "45s × 15s · 4 rounds",
+    titulo: "Ritmo controlado, máxima contração",
+    itens: [
+      { icon: "⏱️", texto: "<strong>45 segundos</strong> de atividade contínua e controlada." },
+      { icon: "😮‍💨", texto: "<strong>15 segundos</strong> de descanso para a transição." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "🍑", texto: "Foque na <strong>contração do glúteo</strong> em cada repetição — qualidade acima de tudo." },
+      { icon: "⚠️", texto: "Se a postura falhar, <strong>diminua o ritmo</strong> ou faça apenas 3 rounds." },
+    ]
+  },
+  "40X20": {
+    tipo: "40s × 20s · 4 rounds",
+    titulo: "Força + Explosão · Resultado Total",
+    itens: [
+      { icon: "⏱️", texto: "<strong>40 segundos</strong> — maior número de repetições com qualidade." },
+      { icon: "😮‍💨", texto: "<strong>20 segundos</strong> para transição e respiração." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "🍑", texto: "<strong>Foco total na contração</strong> do glúteo — cada repetição conta!" },
+      { icon: "💪", texto: "Encontre um <strong>ritmo forte que consiga sustentar</strong> em todos os rounds." },
+    ]
+  },
+};
+
+const C=2*Math.PI*58;
+let nv=0,ta=null,ea=0,fase='cond';
+let iv=null,ts=45,tt=45,tr=false,ac=null;
+let etapa='aq_instrucao',roundAtual=1,totalRounds=1;
+
+function unlockAudio(){
+  if(!ac){
+    ac=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g);g.connect(ac.destination);
+    g.gain.setValueAtTime(0,ac.currentTime);
+    o.start(ac.currentTime);o.stop(ac.currentTime+0.001);
+  } else if(ac.state==='suspended'){ac.resume();}
+}
+function bp(f,i,d,v=0.3){
+  if(!ac)return;
+  const o=ac.createOscillator(),g=ac.createGain();
+  o.connect(g);g.connect(ac.destination);
+  o.frequency.value=f;o.type='sine';
+  g.gain.setValueAtTime(v,ac.currentTime+i);
+  g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+i+d);
+  o.start(ac.currentTime+i);o.stop(ac.currentTime+i+d+0.05);
+}
+function bfim(){bp(784,0,.15,.8);bp(784,.2,.15,.8);bp(784,.4,.15,.8);bp(1047,.65,.6,.9);}
+function bal(){bp(880,0,.15,.7);}
+
+document.addEventListener('touchstart',function(){if(ac&&ac.state==='suspended')ac.resume();});
+document.addEventListener('click',function(){if(ac&&ac.state==='suspended')ac.resume();});
+
+function setNivel(n){nv=n;document.querySelectorAll('.nivel-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+
+function renderInicio(){
+  document.getElementById('treinos-grid').innerHTML=T.map((t,i)=>`
+    <div class="treino-card" onclick="abrirTreino(${i})">
+      <div class="treino-num">${t.num}</div>
+      <div class="treino-info"><h3>${t.nome}</h3><p>${t.descricao}</p></div>
+      <div class="treino-arrow">›</div>
+    </div>`).join('');
+}
+
+function mostrarInstrucao(chave){
+  const instr=INSTRUCOES[chave];
+  if(!instr)return;
+  const badge=T[ta].semanaLabel+' · '+T[ta].nome;
+  document.getElementById('treino-badge').textContent=badge;
+  document.getElementById('instr-tipo').textContent=instr.tipo;
+  document.getElementById('instr-titulo').textContent=instr.titulo;
+  document.getElementById('instr-cards').innerHTML=instr.itens.map(it=>
+    `<div class="instr-card"><div class="instr-icon">${it.icon}</div><div class="instr-text">${it.texto}</div></div>`
+  ).join('');
+  document.getElementById('tela-inicio').style.display='none';
+  document.getElementById('tela-treino').style.display='none';
+  document.getElementById('tela-final').style.display='none';
+  document.getElementById('tela-instrucao').style.display='flex';
+}
+
+function abrirTreino(i){
+  ta=i;etapa='aq_instrucao';
+  const headerSub=document.getElementById('header-sub');
+  if(headerSub) headerSub.textContent=T[i].semanaLabel+' · '+T[i].titulo.split(' ').slice(1).join(' ');
+  mostrarInstrucao('AQUECIMENTO');
+}
+
+function comecarTreino(){
+  unlockAudio();
+  const badge=T[ta].semanaLabel+' · '+T[ta].nome;
+  if(etapa==='aq_instrucao'){
+    etapa='aq';ea=0;fase='aq';roundAtual=1;totalRounds=2;
+    document.getElementById('tela-instrucao').style.display='none';
+    document.getElementById('tela-treino').style.display='flex';
+    document.getElementById('th-titulo').textContent=badge;
+    document.getElementById('th-subtitulo').textContent='Aquecimento · 3 min';
+    rEx();
+  } else if(etapa==='cond_instrucao'){
+    etapa='cond';fase='cond';ea=0;roundAtual=1;totalRounds=4;
+    document.getElementById('tela-instrucao').style.display='none';
+    document.getElementById('tela-treino').style.display='flex';
+    document.getElementById('th-titulo').textContent=badge;
+    document.getElementById('th-subtitulo').textContent=T[ta].subtitulo;
+    rEx();
+  }
+}
+
+function voltarInicio(){
+  pT();
+  ['tela-treino','tela-final','tela-instrucao'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('tela-inicio').style.display='flex';
+}
+
+function getExs(){
+  if(fase==='aq') return T[ta].aq.map(e=>(({nome:e.nome,reps:'30 segundos de atividade',yt:e.yt})));
+  return T[ta].n[nv];
+}
+
+function rEx(){
+  const exs=getExs(),ex=exs[ea],total=exs.length;
+  document.getElementById('progresso').innerHTML=exs.map((_,i)=>
+    `<div class="prog-dot ${i<ea?'done':i===ea?'current':''}"></div>`).join('');
+  document.getElementById('ex-numero').textContent=`${fase==='aq'?'Aquecimento':'Exercício'} ${ea+1} de ${total} · Round ${roundAtual} de ${totalRounds}`;
+  document.getElementById('ex-nome').textContent=ex.nome;
+  document.getElementById('ex-instrucao').textContent=ex.reps;
+  const f=document.getElementById('video-frame');f.classList.add('hidden');f.src='';
+  document.getElementById('video-placeholder').classList.remove('hidden');
+  pT();
+  ts=fase==='aq'?30:T[ta].ts;tt=ts;
+  document.getElementById('timer-label').textContent=fase==='aq'?'Atividade':T[ta].tl;
+  uD();
+  document.getElementById('timer-status').textContent='Pressione iniciar quando estiver pronta';
+  document.getElementById('btn-principal').textContent='Iniciar';
+  const btnPular=document.getElementById('btn-pular');
+  if(fase==='aq'){btnPular.style.display='block';btnPular.textContent='Pular aquecimento → ir para o treino';}
+  else{btnPular.style.display='none';}
+  document.getElementById('lista-items').innerHTML=exs.map((e,i)=>`
+    <div class="lista-item ${i===ea?'current':i<ea?'done':''}" onclick="iEx(${i})">
+      <div class="lista-num">${i<ea?'✓':i+1}</div>
+      <div class="lista-info"><div class="lista-nome">${e.nome}</div><div class="lista-reps">${e.reps}</div></div>
+    </div>`).join('');
+}
+
+function abrirVideo(){
+  const exs=getExs(),yt=exs[ea].yt;
+  if(!yt||yt==='#')return;
+  const ytId=yt.includes('shorts/')?yt.split('shorts/')[1]:yt.includes('youtu.be/')?yt.split('youtu.be/')[1]:yt;
+  const f=document.getElementById('video-frame');
+  f.src=`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+  f.classList.remove('hidden');
+  document.getElementById('video-placeholder').classList.add('hidden');
+}
+
+function acaoPrincipal(){
+  unlockAudio();
+  if(ac&&ac.state==='suspended')ac.resume();
+  tr?pT():iniciarContagem();
+}
+
+function iniciarContagem(){
+  const overlay=document.getElementById('countdown-overlay');
+  const numEl=document.getElementById('countdown-num');
+  let count=3;
+  overlay.style.display='flex';
+  numEl.textContent=count;
+  bp(880,0,0.15,0.8);
+  const ci=setInterval(()=>{
+    count--;
+    if(count>0){
+      numEl.textContent=count;
+      numEl.style.animation='none';
+      numEl.offsetHeight;
+      numEl.style.animation='pop .8s ease-out';
+      bp(880,0,0.15,0.8);
+    } else {
+      overlay.style.display='none';
+      bp(1047,0,0.25,0.9);
+      clearInterval(ci);
+      iT();
+    }
+  },1000);
+}
+
+function iT(){
+  tr=true;document.getElementById('btn-principal').textContent='Pausar';
+  iv=setInterval(()=>{
+    ts--;uD();
+    if(ts<=3&&ts>0)bal();
+    if(ts<=0){
+      clearInterval(iv);tr=false;bfim();
+      if(navigator.vibrate)navigator.vibrate([150,80,150,80,300]);
+      const exs=getExs();
+      if(ea<exs.length-1){ea++;rEx();}
+      else if(roundAtual<totalRounds){roundAtual++;ea=0;rEx();}
+      else if(fase==='aq'){etapa='cond_instrucao';mostrarInstrucao(T[ta].fmt||'45X15');}
+      else{document.getElementById('tela-treino').style.display='none';document.getElementById('tela-final').style.display='flex';}
+    }
+  },1000);
+}
+
+function pT(){clearInterval(iv);tr=false;const b=document.getElementById('btn-principal');if(b)b.textContent='Iniciar';}
+
+function reiniciarTimer(){
+  pT();ts=fase==='aq'?30:T[ta].ts;tt=ts;uD();
+  document.getElementById('timer-status').textContent='Pressione iniciar quando estiver pronta';
+}
+
+function pularFase(){pT();etapa='cond_instrucao';mostrarInstrucao(T[ta].fmt||'45X15');}
+
+function uD(){
+  const m=Math.floor(ts/60),s=ts%60;
+  const el=document.getElementById('timer-display');
+  el.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+  el.className='timer-num'+(ts<=5?' alerta':'');
+  document.getElementById('timer-progress').style.strokeDashoffset=C*(1-ts/tt);
+  document.getElementById('timer-progress').className='ring-prog'+(ts<=5?' alerta':'');
+  document.getElementById('timer-status').textContent=tr?(ts<=5?'Quase lá!':'Em andamento...'):'Pausado';
+}
+
+function proximoEx(){
+  const e=getExs();
+  if(ea<e.length-1){ea++;rEx();}
+  else if(roundAtual<totalRounds){roundAtual++;ea=0;rEx();}
+  else if(fase==='aq'){etapa='cond_instrucao';mostrarInstrucao(T[ta].fmt||'45X15');}
+  else{document.getElementById('tela-treino').style.display='none';document.getElementById('tela-final').style.display='flex';}
+}
+function anteriorEx(){
+  if(ea>0){ea--;rEx();}
+  else if(roundAtual>1){roundAtual--;ea=getExs().length-1;rEx();}
+  else if(fase==='cond'){etapa='aq_instrucao';mostrarInstrucao('AQUECIMENTO');}
+}
+function iEx(i){ea=i;rEx();}
+
+renderInicio();
+</script>
+</body>
+</html>
