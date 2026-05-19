@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Desafio 7 em 30 · Semana 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+(function(){
+  function alinha(svgRoot){
+    var lip=svgRoot.querySelector('.lf-lip'),fit=svgRoot.querySelector('.lf-fit'),sym=svgRoot.querySelector('.lf-sym');
+    if(!lip||!fit||!sym)return;
+    try{
+      var NS='http://www.w3.org/2000/svg',tmp=document.createElementNS(NS,'text');
+      tmp.setAttribute('font-family','Arial,sans-serif');
+      tmp.setAttribute('font-weight','400');
+      tmp.setAttribute('font-size','150');
+      tmp.setAttribute('visibility','hidden');
+      tmp.textContent='O';
+      svgRoot.appendChild(tmp);
+      var oBox=tmp.getBBox();
+      svgRoot.removeChild(tmp);
+      if(!oBox||!oBox.width||oBox.width<=0)return;
+      var wO=oBox.width,cy=180+oBox.y+oBox.height/2,scale=wO/283.28;
+      lip.setAttribute('x',(400-wO/2).toFixed(2));
+      fit.setAttribute('x',(400+wO/2).toFixed(2));
+      sym.setAttribute('transform','translate(400 '+cy.toFixed(2)+') scale('+scale.toFixed(3)+') translate(-225 -225)');
+    }catch(e){}
+  }
+  function todos(){document.querySelectorAll('svg[aria-label="Lipofit"]').forEach(alinha);}
+  window.__alinharLogos=todos;
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){setTimeout(todos,50);});
+  else setTimeout(todos,200);
+  setTimeout(todos,1000);
+})();
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g1:#4d1863;--g2:#8f2424;
+  --card:rgba(255,255,255,0.10);
+  --card2:rgba(255,255,255,0.17);
+  --borda:rgba(255,255,255,0.18);
+  --txt:#f5eaff;--txt2:#d4b8f0;--txt3:#b89ad4;
+}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1) 0%,var(--g2) 100%) fixed;color:var(--txt);min-height:100vh}
+
+.header-wrap{width:100%;background:transparent;text-align:center;padding-bottom:12px}
+.logo-tagline{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:500;color:rgba(255,255,255,0.92);letter-spacing:9px;text-transform:uppercase;text-align:center;margin-top:-44px;padding-bottom:14px}
+.header-wrap img{width:100%;display:block;margin:0 auto}
+.header-sub{font-size:0.95rem;letter-spacing:2px;font-weight:600;color:rgba(255,255,255,0.9);padding:12px 20px 6px;text-transform:uppercase}
+
+#tela-inicio{display:flex;flex-direction:column;align-items:center;min-height:100vh}
+.nivel-section{width:100%;max-width:480px;padding:22px 20px 8px}
+.slabel{font-size:.82rem;color:var(--txt2);letter-spacing:2px;font-weight:600;display:block;margin-bottom:12px;text-transform:uppercase}
+.nivel-bar{display:flex;gap:8px}
+.nivel-btn{flex:1;padding:10px 6px;border:1.5px solid var(--borda);border-radius:8px;background:transparent;color:var(--txt2);font-size:.72rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s}
+.nivel-btn.active{background:rgba(255,255,255,0.22);color:var(--txt);border-color:rgba(255,255,255,0.4)}
+.treinos-grid{width:100%;max-width:480px;padding:14px 20px 32px;display:flex;flex-direction:column;gap:10px}
+.treino-card{background:var(--card);border-radius:14px;padding:16px 18px;border:1px solid var(--borda);cursor:pointer;display:flex;align-items:center;gap:16px;transition:all .2s}
+.treino-card:active{transform:scale(.99);background:var(--card2)}
+.treino-num{width:42px;height:42px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--txt);font-size:.85rem;font-weight:700}
+.treino-info h3{font-size:.88rem;font-weight:600;color:var(--txt)}
+.treino-info p{font-size:.68rem;color:var(--txt3);margin-top:3px;font-weight:500}
+.treino-arrow{color:var(--borda);font-size:1.2rem;margin-left:auto}
+
+#tela-treino{display:none;flex-direction:column;min-height:100vh}
+.treino-header{width:100%;background:rgba(0,0,0,0.25);padding:14px 18px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;backdrop-filter:blur(8px);border-bottom:1px solid var(--borda)}
+.btn-voltar{background:none;border:none;color:var(--txt);font-size:1.3rem;cursor:pointer;padding:4px;opacity:.8;font-family:'Poppins',sans-serif}
+.th-info h1{font-size:1.1rem;font-weight:700;color:var(--txt);line-height:1.2}
+.th-info p{font-size:.92rem;color:var(--lilas);margin-top:4px;font-weight:600}
+.treino-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 18px;gap:12px;max-width:480px;width:100%;margin:0 auto}
+
+.progresso{display:flex;gap:5px;width:100%}
+.prog-dot{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.15);transition:all .3s}
+.prog-dot.done{background:rgba(255,255,255,0.5)}
+.prog-dot.current{background:#fff}
+
+.ex-card{width:100%;background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--borda)}
+.ex-carousel-wrap{width:100%;display:none}
+.ex-carousel-wrap.show{display:block}
+.ex-carousel-hint{font-size:.72rem;color:var(--txt3);text-align:center;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+.ex-carousel-hint .arrow{display:inline-block;animation:carouselArrow 1.8s ease-in-out infinite}
+@keyframes carouselArrow{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.ex-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:14px;padding-bottom:6px;scrollbar-width:none}
+.ex-carousel::-webkit-scrollbar{display:none}
+.ex-carousel-card{flex:0 0 calc(100% - 18px);scroll-snap-align:center;background:var(--card);border:1px solid var(--borda);border-radius:16px;overflow:hidden;transition:opacity .2s}
+.ex-carousel-card.dimmed{opacity:.55}
+.ex-carousel-card.current{border-color:var(--accent,#fff);box-shadow:0 0 0 1px var(--accent,rgba(255,255,255,.4))}
+.ex-carousel-card-header{padding:14px 18px;border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:10px}
+.ex-carousel-card-tag{font-size:.7rem;color:var(--txt3);letter-spacing:2px;background:rgba(255,255,255,.08);padding:3px 8px;border-radius:4px;font-weight:600}
+.ex-carousel-card-tag.atual{background:rgba(255,209,102,.15);color:#FFD166}
+.ex-carousel-card-nome{font-size:.95rem;font-weight:600;color:var(--txt);line-height:1.3;flex:1}
+.ex-carousel-card-reps{padding:12px 18px;font-size:.92rem;color:var(--txt2);border-bottom:1px solid var(--borda);font-weight:500;letter-spacing:.2px}
+.ex-carousel-card .video-wrap{aspect-ratio:16/9;background:var(--card2)}
+.ex-carousel-dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.ex-carousel-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .2s}
+.ex-carousel-dot.active{background:var(--txt);width:22px;border-radius:4px}
+.ex-card-amrap3{width:100%;display:flex;flex-direction:column;gap:10px}
+.ex-card-amrap3.hidden{display:none}
+.amrap3-header{padding:14px 16px 8px;text-align:center}
+.amrap3-ex{background:var(--card);border:1px solid var(--borda);border-radius:14px;overflow:hidden}
+.amrap3-ex-info{padding:12px 14px}
+.amrap3-ex-titulo{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.amrap3-ex-tag{font-size:.65rem;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;color:var(--txt3);background:rgba(255,255,255,0.08);padding:3px 8px;border-radius:6px;flex-shrink:0}
+.amrap3-ex-nome{font-size:.95rem;font-weight:700;color:var(--txt);line-height:1.3}
+.amrap3-ex-reps{font-size:.78rem;color:var(--txt2);margin-top:4px;font-weight:500}
+.ex-header{padding:16px 18px 12px}
+.ex-numero{font-size:.9rem;color:var(--txt3);font-weight:600;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase}
+.ex-nome{font-size:1.05rem;font-weight:700;color:var(--txt);line-height:1.3}
+.ex-instrucao{font-size:.76rem;color:var(--txt2);margin-top:6px;font-weight:500}
+.video-wrap{position:relative;width:100%;padding-bottom:56.25%;background:rgba(0,0,0,0.4)}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-placeholder{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:12px}
+.play-circle{width:58px;height:58px;border:1.5px solid rgba(255,255,255,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08)}
+.play-circle svg{width:20px;height:20px;fill:#fff;margin-left:3px}
+.video-placeholder p{font-size:.68rem;color:rgba(255,255,255,.6);font-family:'Poppins',sans-serif;font-weight:400;letter-spacing:2px;text-transform:uppercase}
+
+.timer-section{width:100%;background:var(--card);border-radius:16px;padding:20px 18px;text-align:center;border:1px solid var(--borda)}
+.timer-label{font-size:1rem;color:var(--txt);letter-spacing:4px;font-weight:700;margin-bottom:14px;text-transform:uppercase}
+.timer-label.descanso{font-size:1rem;color:#FFD166;letter-spacing:5px;font-weight:800;animation:pulseDescanso 1.2s ease-in-out infinite}
+@keyframes pulseDescanso{0%,100%{opacity:.85}50%{opacity:1}}
+.timer-ring{position:relative;width:130px;height:130px;margin:0 auto 12px}
+.timer-ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(255,255,255,0.12);stroke-width:4}
+.ring-prog{fill:none;stroke-width:4;stroke-linecap:round;stroke:rgba(255,255,255,0.85);transition:stroke-dashoffset .9s linear}
+.ring-prog.alerta{stroke:#ff6b6b}
+.timer-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.1rem;font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.timer-num.alerta{color:#ff6b6b}
+.timer-status{font-size:.68rem;color:var(--txt3);font-weight:500;letter-spacing:1px;text-transform:uppercase}
+
+.btn-row{display:flex;gap:10px;width:100%}
+.btn{flex:1;padding:14px;border-radius:10px;border:none;font-size:.8rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:.5px;text-transform:uppercase;transition:all .15s}
+.btn:active{transform:scale(.97);opacity:.9}
+.btn-primary{background:rgba(255,255,255,0.2);color:var(--txt);border:1px solid rgba(255,255,255,0.3)}
+.btn-ghost{flex:none;width:52px;background:var(--card);color:var(--txt2);border:1px solid var(--borda);font-size:.85rem}
+.btn-reset{flex:none;width:52px;background:var(--card);color:var(--txt2);border:1px solid var(--borda);border-radius:10px;font-size:.85rem;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;padding:14px}
+.btn-reset:active{transform:scale(.97);opacity:.9}
+
+.lista{width:100%;background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--borda);margin-bottom:20px}
+.lista-titulo{padding:11px 18px;font-size:.6rem;color:var(--txt3);letter-spacing:3px;font-weight:600;border-bottom:1px solid var(--borda);text-transform:uppercase}
+.lista-item{display:flex;align-items:center;padding:12px 18px;gap:14px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;transition:background .15s}
+.lista-item:last-child{border-bottom:none}
+.lista-item:active,.lista-item.current{background:var(--card2)}
+.lista-item.done{opacity:.35}
+.lista-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;color:var(--txt)}
+.lista-item.current .lista-num{background:rgba(255,255,255,.3)}
+.lista-nome{font-size:.8rem;font-weight:600;color:var(--txt)}
+.lista-reps{font-size:.78rem;color:var(--txt2);margin-top:3px;font-weight:500}
+
+/* TELA INSTRUÇÃO */
+#tela-instrucao{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 20px;gap:0}
+.instr-wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:16px}
+.instr-tipo{font-size:.88rem;color:var(--txt2);letter-spacing:2px;font-weight:700;text-transform:uppercase;text-align:center}
+.instr-titulo{font-size:1.25rem;font-weight:700;color:var(--txt);text-align:center;line-height:1.3}
+.instr-cards{display:flex;flex-direction:column;gap:10px}
+.instr-card{background:var(--card);border:1px solid var(--borda);border-left:3px solid rgba(255,255,255,0.35);border-radius:10px;padding:14px 16px}
+.instr-text{font-size:.85rem;color:var(--txt2);line-height:1.55;font-weight:400}
+.instr-text strong{color:var(--txt);font-weight:600}
+.btn-comecar{width:100%;padding:16px;border-radius:12px;border:none;background:rgba(255,255,255,0.2);color:var(--txt);font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:1px;text-transform:uppercase;border:1px solid rgba(255,255,255,0.3);margin-top:4px}
+
+#tela-final{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px;gap:14px;min-height:100vh}
+.final-logo-wrap{width:100%;max-width:360px;border-radius:16px;overflow:hidden;margin-bottom:8px}
+.final-logo-wrap img{width:100%;display:block}
+.final-icon{width:68px;height:68px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.final-icon svg{width:28px;height:28px;fill:#fff}
+#tela-final h2{font-size:1.35rem;color:var(--txt);font-weight:700}
+#tela-final p{color:var(--txt2);font-size:.85rem;line-height:1.7;max-width:300px}
+.btn-pular{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.4);font-size:.85rem;font-weight:500;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:1px;text-transform:uppercase;display:none}
+.treino-badge-wrap{text-align:center;margin-bottom:12px}
+.treino-badge{display:inline-block;font-size:.95rem;color:rgba(255,255,255,0.9);letter-spacing:2px;font-weight:700;text-transform:uppercase}
+.btn-final{width:100%;max-width:300px;padding:15px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);color:var(--txt);font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-top:8px}
+.hidden{display:none!important}
+.video-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.video-modal.show{display:flex}
+.video-modal-content{background:var(--card);border:1px solid var(--borda);border-radius:16px;width:100%;max-width:560px;overflow:hidden;backdrop-filter:blur(20px) saturate(1.1)}
+.video-modal-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--borda);gap:12px}
+.video-modal-header-title{font-size:.85rem;font-weight:600;color:var(--txt);line-height:1.3;flex:1}
+.video-modal-close{background:transparent;border:1px solid var(--borda);color:var(--txt);font-size:1.1rem;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0}
+.video-modal iframe{width:100%;aspect-ratio:16/9;border:none;display:block;background:#000}
+.countdown-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.75);
+  display:none;align-items:center;justify-content:center;
+  z-index:100;
+}
+.countdown-num{
+  font-size:8rem;font-weight:800;color:#fff;
+  font-family:'Poppins',sans-serif;
+  animation:pop .8s ease-out;
+}
+@keyframes pop{
+  0%{transform:scale(0.5);opacity:0}
+  50%{transform:scale(1.2);opacity:1}
+  100%{transform:scale(1);opacity:1}
+}
+</style>
+</head>
+<body>
+
+<div id="tela-inicio">
+  <div class="header-wrap">
+    <svg viewBox="0 0 800 280" style="width:100%;max-width:520px;display:block;margin:0 auto" role="img" aria-label="Lipofit"><title>Lipofit</title><g fill="currentColor"><text class="lf-lip" x="346" y="180" text-anchor="end" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">LIP</text><text class="lf-fit" x="454" y="180" text-anchor="start" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">FIT</text><g class="lf-sym" transform="translate(400 110) scale(0.32) translate(-225 -225)"><circle cx="225" cy="225" r="180" fill="none" stroke="currentColor" stroke-width="6"/><line x1="225" y1="45" x2="225" y2="97.36" stroke="currentColor" stroke-width="6"/><line x1="362" y1="118" x2="333.5" y2="146.98" stroke="currentColor" stroke-width="6"/><circle cx="225" cy="225" r="127.64" fill="none" stroke="currentColor" stroke-width="28"/><path d="M 188.24 319.58 C 197.68 323.88 208.19 326.06 219 326.06 C 219.45 326.06 219.91 325.98 220.36 325.98 C 220.96 326 221.57 326.07 222.18 326.07 C 224.5 326.07 226.84 325.8 229.19 325.41 C 232.7 324.98 236.21 324.32 239.71 323.43 L 252.78 320.08 C 271.01 315.41 286.24 303.86 294.59 288.38 C 320.2 240.85 276.41 185.73 274.54 183.41 C 273.69 182.36 272.25 182 271.01 182.51 C 269.76 183.02 269 184.29 269.13 185.64 C 270.46 198.84 269.9 208.26 268.46 214.99 C 270.79 200.11 263.79 188.49 258.14 181.8 C 255.7 178.91 252.58 176.23 248.32 173.37 C 215.14 151.04 227.21 120.74 227.75 119.46 C 228.28 118.18 227.88 116.69 226.76 115.85 C 225.65 115.02 224.12 115.03 223.03 115.9 C 212.36 124.39 207.95 139.46 206.13 150.61 C 204.91 158.09 205.2 166.3 206.99 175 C 210.09 190.04 207.39 202.39 203.04 211.8 C 204.17 190.09 191.48 166.29 190.7 164.84 C 190.03 163.61 188.61 163 187.27 163.33 C 185.91 163.68 184.96 164.89 184.96 166.29 L 184.96 166.92 C 184.96 180.03 179.96 192.46 170.86 201.92 C 153.27 220.2 145.18 245.18 149.22 268.76 C 153.18 291.86 167.05 309.91 188.26 319.59 Z M 204.22 281.27 C 205.22 282.61 207.12 282.91 208.47 281.91 C 209.23 281.36 209.91 280.76 210.53 280.14 C 214.86 276.05 224.13 265.02 220.64 248.09 C 219.84 244.23 219.71 240.78 220.24 237.55 C 220.46 236.21 220.77 234.74 221.18 233.25 C 222.23 239.22 225.61 246.16 234.27 251.99 C 236.04 253.18 237.3 254.25 238.24 255.36 C 242.17 260.01 245.39 267.56 238.41 277.12 C 237.73 278.06 237.63 279.3 238.17 280.33 C 238.71 281.36 239.64 281.96 240.94 281.97 C 241.3 281.97 244.51 281.8 247.42 278.51 C 250.08 275.51 251.62 270.95 252.05 264.89 C 257.29 274.39 263.22 290 255.93 303.54 C 252.36 310.16 245.8 315.11 237.92 317.13 L 231.39 318.8 C 230.36 319.06 229.34 319.16 228.31 319.32 C 226.13 319.59 223.96 319.78 221.8 319.86 C 217.18 319.81 212.69 318.97 208.68 317.14 C 199.5 312.94 193.5 305.12 191.78 295.11 C 190 284.75 193.59 273.73 201.38 265.64 C 204.22 262.68 206.38 259.24 207.8 255.45 C 209.91 262.23 211.18 271.04 205.99 276.04 C 205.36 276.61 204.93 276.93 204.84 277 C 203.49 278 203.2 279.91 204.21 281.26 Z M 175.23 206.14 C 182.82 198.25 187.87 188.51 189.96 177.99 C 195.64 192.23 202.86 217.79 188.69 231.32 C 187.3 232.57 186.38 233.28 186.18 233.43 C 184.83 234.43 184.54 236.34 185.54 237.69 C 186.54 239.05 188.45 239.33 189.8 238.34 C 191.59 237.02 193.17 235.59 194.55 234.07 C 203.03 225.55 219.29 204.58 212.96 173.77 C 211.31 165.79 211.05 158.33 212.14 151.59 C 213.25 144.79 215.37 136.43 219.42 129.47 C 218.3 142.23 221.17 162.46 244.89 178.43 C 248.68 180.97 251.4 183.29 253.46 185.73 C 260.48 194.03 269.87 211.2 253.94 233.03 C 253.26 233.97 253.16 235.21 253.7 236.24 C 254.25 237.27 255.25 237.9 256.47 237.88 C 257.05 237.87 262.26 237.59 267.23 231.99 C 273.5 224.89 276.42 212.82 275.93 196.01 C 286.93 213.1 307.19 252.12 289.21 285.48 C 282.58 297.79 271.07 307.34 257.11 312.36 C 258.72 310.54 260.16 308.57 261.31 306.43 C 274.59 281.78 252.09 253.46 251.12 252.26 C 250.27 251.21 248.83 250.87 247.59 251.36 C 246.34 251.88 245.58 253.15 245.71 254.5 C 245.75 254.9 245.79 255.3 245.82 255.69 C 244.84 253.89 243.76 252.45 242.9 251.43 C 241.59 249.88 239.93 248.45 237.68 246.94 C 222.19 236.51 227.71 222.43 227.95 221.84 C 228.49 220.56 228.09 219.07 226.98 218.23 C 225.87 217.39 224.34 217.41 223.24 218.28 C 217.52 222.82 215.19 230.73 214.23 236.58 C 213.59 240.5 213.74 244.79 214.68 249.33 C 215.42 252.96 215.46 256.27 215.04 259.22 C 213.45 250.88 209.67 243.77 209.36 243.21 C 208.69 241.98 207.29 241.52 205.93 241.86 C 204.57 242.21 203.63 243.58 203.63 244.98 C 203.63 251.14 201.27 256.97 197 261.41 C 187.87 270.9 183.67 283.89 185.77 296.15 C 187.16 304.25 190.93 311.12 196.59 316.32 C 194.61 315.64 192.67 314.89 190.79 314.03 C 171.46 305.21 158.83 288.76 175.24 206.14 Z M 175.23 206.14"/></g></g></svg>
+    <div class="logo-tagline">DESAFIO 7 EM 30</div>
+    <div class="header-sub" id="header-sub">DESPERTA &nbsp;·&nbsp; SEMANA 1</div>
+  </div>
+  <div class="nivel-section">
+    <span class="slabel">Escolha o seu nível</span>
+    <div class="nivel-bar">
+      <button class="nivel-btn active" onclick="setNivel(0)">Iniciante</button>
+      <button class="nivel-btn" onclick="setNivel(1)">Intermediária</button>
+      <button class="nivel-btn" onclick="setNivel(2)">Avançada</button>
+    </div>
+  </div>
+  <div class="treinos-grid" id="treinos-grid"></div>
+</div>
+
+<!-- INSTRUÇÃO -->
+<div id="tela-instrucao">
+  <div class="instr-wrap">
+    <div class="treino-badge-wrap"><div id="treino-badge" class="treino-badge"></div></div>
+    <div class="instr-tipo" id="instr-tipo">AMRAP</div>
+    <div class="instr-titulo" id="instr-titulo">Como funciona</div>
+    <div class="instr-cards" id="instr-cards"></div>
+    <button class="btn-comecar" id="btn-comecar" onclick="comecarTreino()">Vamos treinar &#8594;</button>
+  </div>
+</div>
+
+<div id="tela-treino">
+  <div class="treino-header">
+    <button class="btn-voltar" onclick="voltarInicio()">&#8592;</button>
+    <div class="th-info">
+      <h1 id="th-titulo">—</h1>
+      <p id="th-subtitulo">—</p>
+    </div>
+  </div>
+  <div class="treino-body">
+    <div class="progresso" id="progresso"></div>
+    <div class="ex-card" id="ex-card">
+      <div class="ex-header">
+        <div class="ex-numero" id="ex-numero"></div>
+        <div class="ex-nome" id="ex-nome"></div>
+        <div class="ex-instrucao" id="ex-instrucao"></div>
+      </div>
+      <div class="video-wrap">
+        <div class="video-placeholder" id="video-placeholder" onclick="abrirVideo()">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <p>Ver exercício</p>
+        </div>
+        <iframe id="video-frame" class="hidden" allow="autoplay;encrypted-media" allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="ex-card-amrap3 hidden" id="ex-card-amrap3">
+      <div class="amrap3-header">
+        <div class="ex-numero" id="amrap3-bloco-label"></div>
+      </div>
+      <div class="amrap3-ex" id="amrap3-ex-0">
+        <div class="amrap3-ex-info">
+          <div class="amrap3-ex-titulo"><span class="amrap3-ex-tag">Exercício 1</span><span class="amrap3-ex-nome" id="amrap3-nome-0"></span></div>
+          <div class="amrap3-ex-reps" id="amrap3-reps-0"></div>
+        </div>
+        <div class="video-wrap">
+          <div class="video-placeholder" id="amrap3-placeholder-0" onclick="abrirVideoIdx(0)">
+            <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <p>Ver exercício</p>
+          </div>
+          <iframe id="amrap3-frame-0" class="hidden" allow="autoplay;encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="amrap3-ex" id="amrap3-ex-1">
+        <div class="amrap3-ex-info">
+          <div class="amrap3-ex-titulo"><span class="amrap3-ex-tag">Exercício 2</span><span class="amrap3-ex-nome" id="amrap3-nome-1"></span></div>
+          <div class="amrap3-ex-reps" id="amrap3-reps-1"></div>
+        </div>
+        <div class="video-wrap">
+          <div class="video-placeholder" id="amrap3-placeholder-1" onclick="abrirVideoIdx(1)">
+            <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <p>Ver exercício</p>
+          </div>
+          <iframe id="amrap3-frame-1" class="hidden" allow="autoplay;encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <div class="ex-carousel-wrap" id="ex-carousel-wrap">
+      <div class="ex-carousel-hint" id="ex-carousel-hint">← Arraste para os lados <span class="arrow">→</span></div>
+      <div class="ex-carousel" id="ex-carousel"></div>
+      <div class="ex-carousel-dots" id="ex-carousel-dots"></div>
+    </div>
+    <div class="timer-section">
+      <div class="timer-label" id="timer-label">Descanso</div>
+      <div class="timer-ring">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle class="ring-bg" cx="65" cy="65" r="58"/>
+          <circle class="ring-prog" id="timer-progress" cx="65" cy="65" r="58" stroke-dasharray="364.4" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-display">1:00</div>
+      </div>
+      <div class="timer-status" id="timer-status">Pressione iniciar quando estiver pronta</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="anteriorEx()">&#8592;</button>
+      <button class="btn btn-primary" id="btn-principal" onclick="acaoPrincipal()">Iniciar</button>
+      <button class="btn-reset" onclick="reiniciarTimer()" title="Reiniciar">↺</button>
+      <button class="btn btn-ghost" onclick="proximoEx()">&#8594;</button>
+    </div>
+    <button class="btn-pular" id="btn-pular" onclick="pularFase()"></button>
+    <div class="lista" id="lista-card">
+      <div class="lista-titulo">Exercícios do treino</div>
+      <div id="lista-items"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tela-final">
+  <div class="final-logo-wrap"><svg viewBox="0 0 800 280" style="width:100%;max-width:520px;display:block;margin:0 auto" role="img" aria-label="Lipofit"><title>Lipofit</title><g fill="currentColor"><text class="lf-lip" x="346" y="180" text-anchor="end" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">LIP</text><text class="lf-fit" x="454" y="180" text-anchor="start" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">FIT</text><g class="lf-sym" transform="translate(400 110) scale(0.32) translate(-225 -225)"><circle cx="225" cy="225" r="180" fill="none" stroke="currentColor" stroke-width="6"/><line x1="225" y1="45" x2="225" y2="97.36" stroke="currentColor" stroke-width="6"/><line x1="362" y1="118" x2="333.5" y2="146.98" stroke="currentColor" stroke-width="6"/><circle cx="225" cy="225" r="127.64" fill="none" stroke="currentColor" stroke-width="28"/><path d="M 188.24 319.58 C 197.68 323.88 208.19 326.06 219 326.06 C 219.45 326.06 219.91 325.98 220.36 325.98 C 220.96 326 221.57 326.07 222.18 326.07 C 224.5 326.07 226.84 325.8 229.19 325.41 C 232.7 324.98 236.21 324.32 239.71 323.43 L 252.78 320.08 C 271.01 315.41 286.24 303.86 294.59 288.38 C 320.2 240.85 276.41 185.73 274.54 183.41 C 273.69 182.36 272.25 182 271.01 182.51 C 269.76 183.02 269 184.29 269.13 185.64 C 270.46 198.84 269.9 208.26 268.46 214.99 C 270.79 200.11 263.79 188.49 258.14 181.8 C 255.7 178.91 252.58 176.23 248.32 173.37 C 215.14 151.04 227.21 120.74 227.75 119.46 C 228.28 118.18 227.88 116.69 226.76 115.85 C 225.65 115.02 224.12 115.03 223.03 115.9 C 212.36 124.39 207.95 139.46 206.13 150.61 C 204.91 158.09 205.2 166.3 206.99 175 C 210.09 190.04 207.39 202.39 203.04 211.8 C 204.17 190.09 191.48 166.29 190.7 164.84 C 190.03 163.61 188.61 163 187.27 163.33 C 185.91 163.68 184.96 164.89 184.96 166.29 L 184.96 166.92 C 184.96 180.03 179.96 192.46 170.86 201.92 C 153.27 220.2 145.18 245.18 149.22 268.76 C 153.18 291.86 167.05 309.91 188.26 319.59 Z M 204.22 281.27 C 205.22 282.61 207.12 282.91 208.47 281.91 C 209.23 281.36 209.91 280.76 210.53 280.14 C 214.86 276.05 224.13 265.02 220.64 248.09 C 219.84 244.23 219.71 240.78 220.24 237.55 C 220.46 236.21 220.77 234.74 221.18 233.25 C 222.23 239.22 225.61 246.16 234.27 251.99 C 236.04 253.18 237.3 254.25 238.24 255.36 C 242.17 260.01 245.39 267.56 238.41 277.12 C 237.73 278.06 237.63 279.3 238.17 280.33 C 238.71 281.36 239.64 281.96 240.94 281.97 C 241.3 281.97 244.51 281.8 247.42 278.51 C 250.08 275.51 251.62 270.95 252.05 264.89 C 257.29 274.39 263.22 290 255.93 303.54 C 252.36 310.16 245.8 315.11 237.92 317.13 L 231.39 318.8 C 230.36 319.06 229.34 319.16 228.31 319.32 C 226.13 319.59 223.96 319.78 221.8 319.86 C 217.18 319.81 212.69 318.97 208.68 317.14 C 199.5 312.94 193.5 305.12 191.78 295.11 C 190 284.75 193.59 273.73 201.38 265.64 C 204.22 262.68 206.38 259.24 207.8 255.45 C 209.91 262.23 211.18 271.04 205.99 276.04 C 205.36 276.61 204.93 276.93 204.84 277 C 203.49 278 203.2 279.91 204.21 281.26 Z M 175.23 206.14 C 182.82 198.25 187.87 188.51 189.96 177.99 C 195.64 192.23 202.86 217.79 188.69 231.32 C 187.3 232.57 186.38 233.28 186.18 233.43 C 184.83 234.43 184.54 236.34 185.54 237.69 C 186.54 239.05 188.45 239.33 189.8 238.34 C 191.59 237.02 193.17 235.59 194.55 234.07 C 203.03 225.55 219.29 204.58 212.96 173.77 C 211.31 165.79 211.05 158.33 212.14 151.59 C 213.25 144.79 215.37 136.43 219.42 129.47 C 218.3 142.23 221.17 162.46 244.89 178.43 C 248.68 180.97 251.4 183.29 253.46 185.73 C 260.48 194.03 269.87 211.2 253.94 233.03 C 253.26 233.97 253.16 235.21 253.7 236.24 C 254.25 237.27 255.25 237.9 256.47 237.88 C 257.05 237.87 262.26 237.59 267.23 231.99 C 273.5 224.89 276.42 212.82 275.93 196.01 C 286.93 213.1 307.19 252.12 289.21 285.48 C 282.58 297.79 271.07 307.34 257.11 312.36 C 258.72 310.54 260.16 308.57 261.31 306.43 C 274.59 281.78 252.09 253.46 251.12 252.26 C 250.27 251.21 248.83 250.87 247.59 251.36 C 246.34 251.88 245.58 253.15 245.71 254.5 C 245.75 254.9 245.79 255.3 245.82 255.69 C 244.84 253.89 243.76 252.45 242.9 251.43 C 241.59 249.88 239.93 248.45 237.68 246.94 C 222.19 236.51 227.71 222.43 227.95 221.84 C 228.49 220.56 228.09 219.07 226.98 218.23 C 225.87 217.39 224.34 217.41 223.24 218.28 C 217.52 222.82 215.19 230.73 214.23 236.58 C 213.59 240.5 213.74 244.79 214.68 249.33 C 215.42 252.96 215.46 256.27 215.04 259.22 C 213.45 250.88 209.67 243.77 209.36 243.21 C 208.69 241.98 207.29 241.52 205.93 241.86 C 204.57 242.21 203.63 243.58 203.63 244.98 C 203.63 251.14 201.27 256.97 197 261.41 C 187.87 270.9 183.67 283.89 185.77 296.15 C 187.16 304.25 190.93 311.12 196.59 316.32 C 194.61 315.64 192.67 314.89 190.79 314.03 C 171.46 305.21 158.83 288.76 175.24 206.14 Z M 175.23 206.14"/></g></g></svg><div class="logo-tagline">DESAFIO 7 EM 30</div></div>
+  <div class="final-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+  <h2>Treino concluído</h2>
+  <p>Parabéns! Anote quantas voltas você completou e tente superar na próxima semana.</p>
+  <button class="btn-final" onclick="voltarInicio()">&#8592; Voltar aos treinos</button>
+</div>
+
+<div class="countdown-overlay" id="countdown-overlay">
+  <div class="countdown-num" id="countdown-num">3</div>
+</div>
+
+<div class="video-modal" id="video-modal" onclick="if(event.target===this)fecharVideoModal()">
+  <div class="video-modal-content">
+    <div class="video-modal-header">
+      <div class="video-modal-header-title" id="video-modal-title"></div>
+      <button class="video-modal-close" onclick="fecharVideoModal()" aria-label="Fechar">✕</button>
+    </div>
+    <iframe id="video-modal-frame" allow="autoplay;encrypted-media" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+const T = [
+  {
+    "titulo": "Treino 1 · Segunda-feira",
+    "subtitulo": "45s × 15s",
+    "num": "01",
+    "fmt": "45x15",
+    "ts": 45,
+    "td": 15,
+    "tl": "Atividade",
+    "semanaLabel": "DESPERTA",
+    "semNum": 1,
+    "aq": [
+      {
+        "nome": "AGACHAMENTO LIVRE 90 GRAUS",
+        "yt": "56QG5WpSXYc"
+      },
+      {
+        "nome": "ELEVAÇÃO DE QUADRIL",
+        "yt": "aaXJ7TSwpqk"
+      },
+      {
+        "nome": "BOM DIA COM MÃOS ATRÁS DA CABEÇA",
+        "yt": "wqn2vp4Isx0"
+      },
+      {
+        "nome": "PRANCHA SOBE E DESCE ADAPTADO",
+        "yt": "OnrpQyD4Tu8"
+      },
+      {
+        "nome": "POLICHINELOS SEM IMPACTO",
+        "yt": "xtP-2XQIGqs"
+      }
+    ],
+    "n": [
+      [
+        {
+          "nome": "AGACHAMENTO LIVRE SENTANDO NO BANCO",
+          "reps": "45 segundos",
+          "yt": "NfV854dfqpk"
+        },
+        {
+          "nome": "ELEVAÇÃO DE QUADRIL COM PESO",
+          "reps": "45 segundos",
+          "yt": "_AAek8IPgug"
+        },
+        {
+          "nome": "AFUNDO CURTINHO COM APOIO",
+          "reps": "45 segundos lado direito",
+          "yt": "qijPKbtRAxw"
+        },
+        {
+          "nome": "AFUNDO CURTINHO COM APOIO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "qijPKbtRAxw"
+        },
+        {
+          "nome": "PANTURRILHA BILATERAL",
+          "reps": "45 segundos",
+          "yt": "gsi0KFwdvgo"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO COM PESO",
+          "reps": "45 segundos",
+          "yt": "iNtroQ4bPOs"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA COM PESO NO BANCO",
+          "reps": "45 segundos",
+          "yt": "PHY1HdGQzwQ"
+        },
+        {
+          "nome": "AFUNDO CURTINHO",
+          "reps": "45 segundos lado direito",
+          "yt": "WpDacfJPQlw"
+        },
+        {
+          "nome": "AFUNDO CURTINHO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "WpDacfJPQlw"
+        },
+        {
+          "nome": "LEVANTAMENTO TERRA COM PESO",
+          "reps": "45 segundos",
+          "yt": "wB8Og0OQmvk"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO COM PESO 90 GRAUS",
+          "reps": "45 segundos",
+          "yt": "x0iN1_P4hGY"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA COM PESO NO BANCO",
+          "reps": "45 segundos",
+          "yt": "PHY1HdGQzwQ"
+        },
+        {
+          "nome": "AFUNDO CURTINHO COM PESO",
+          "reps": "45 segundos lado direito",
+          "yt": "WpDacfJPQlw"
+        },
+        {
+          "nome": "AFUNDO CURTINHO COM PESO",
+          "reps": "45 segundos lado esquerdo",
+          "yt": "WpDacfJPQlw"
+        },
+        {
+          "nome": "LEVANTAMENTO TERRA COM PESO",
+          "reps": "45 segundos",
+          "yt": "wB8Og0OQmvk"
+        }
+      ]
+    ]
+  },
+  {
+    "titulo": "Treino 2 · Terça-feira",
+    "subtitulo": "30s × 30s",
+    "num": "02",
+    "fmt": "30x30",
+    "ts": 30,
+    "td": 30,
+    "tl": "Atividade",
+    "semanaLabel": "DESPERTA",
+    "semNum": 1,
+    "aq": [
+      {
+        "nome": "GIROS COM OS BRAÇOS PARA FRENTE",
+        "yt": "0AUqwZ4dIVQ"
+      },
+      {
+        "nome": "AGACHAMENTO SUMO COM PESO CORPORAL",
+        "yt": "pe1PVooyEGE"
+      },
+      {
+        "nome": "PRANCHA COM JOELHOS ALTERNADOS",
+        "yt": "2r8niMjcGGk"
+      },
+      {
+        "nome": "ELEVAÇÃO DE QUADRIL COM MARCHA",
+        "yt": "UNIYtnYSF2I"
+      },
+      {
+        "nome": "CORRIDA NO LUGAR",
+        "yt": "ytyNe16X7IU"
+      }
+    ],
+    "n": [
+      [
+        {
+          "nome": "AGACHAMENTO COM SALTO SEM IMPACTO",
+          "reps": "30 segundos",
+          "yt": "XdAx6NHbFiQ"
+        },
+        {
+          "nome": "ARRANCO COM PESO",
+          "reps": "30 segundos",
+          "yt": "Ce7E5M6_t-k"
+        },
+        {
+          "nome": "BURPEE ADAPTADO",
+          "reps": "30 segundos",
+          "yt": "UVOSDGwmGtg"
+        },
+        {
+          "nome": "ESCALADOR ADAPTADO",
+          "reps": "30 segundos",
+          "yt": "-vaML7aolag"
+        },
+        {
+          "nome": "ABDOMINAL CURTINHO",
+          "reps": "30 segundos",
+          "yt": "i3tNCeXAXu8"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO COM SALTO COM PESO",
+          "reps": "30 segundos",
+          "yt": "lPk7trWnC0w"
+        },
+        {
+          "nome": "ARRANCO COM PESO",
+          "reps": "30 segundos",
+          "yt": "Ce7E5M6_t-k"
+        },
+        {
+          "nome": "BURPEE",
+          "reps": "30 segundos",
+          "yt": "1wNdMiE5z5E"
+        },
+        {
+          "nome": "ESCALADOR",
+          "reps": "30 segundos",
+          "yt": "k1o4DH7FjKA"
+        },
+        {
+          "nome": "ABDOMINAL ELEVAÇÃO DE PERNAS NO SOLO",
+          "reps": "30 segundos",
+          "yt": "Nyc03ZQGCb4"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO COM SALTO COM PULSO",
+          "reps": "30 segundos",
+          "yt": "UtQJ9GPy18w"
+        },
+        {
+          "nome": "ARRANCO COM PESO",
+          "reps": "30 segundos",
+          "yt": "Ce7E5M6_t-k"
+        },
+        {
+          "nome": "BURPEE PULANDO O PESO",
+          "reps": "30 segundos",
+          "yt": "s-zOzEkusKQ"
+        },
+        {
+          "nome": "ESCALADOR",
+          "reps": "30 segundos",
+          "yt": "k1o4DH7FjKA"
+        },
+        {
+          "nome": "ABDOMINAL ELEVAÇÃO DE PERNAS NO SOLO",
+          "reps": "30 segundos",
+          "yt": "Nyc03ZQGCb4"
+        }
+      ]
+    ]
+  },
+  {
+    "titulo": "Treino 3 · Quarta-feira",
+    "subtitulo": "40s × 20s",
+    "num": "03",
+    "fmt": "40x20",
+    "ts": 40,
+    "td": 20,
+    "tl": "Atividade",
+    "semanaLabel": "DESPERTA",
+    "semNum": 1,
+    "aq": [
+      {
+        "nome": "FLEXÃO ESCAPULAR",
+        "yt": "0d1XGA2i83U"
+      },
+      {
+        "nome": "GIROS COM OS BRAÇOS PARA TRÁS",
+        "yt": "DCMvBURAMZs"
+      },
+      {
+        "nome": "PERDIGUEIRO",
+        "yt": "VIESAhLjnfk"
+      },
+      {
+        "nome": "PRANCHA COM JOELHOS ALTERNADOS",
+        "yt": "2r8niMjcGGk"
+      },
+      {
+        "nome": "CORRIDA NO LUGAR",
+        "yt": "ytyNe16X7IU"
+      }
+    ],
+    "n": [
+      [
+        {
+          "nome": "REMADA CURVADA COM PESO",
+          "reps": "40 segundos",
+          "yt": "U6zGmjo8Pe4"
+        },
+        {
+          "nome": "DESENVOLVIMENTO DE OMBROS COM PESO",
+          "reps": "40 segundos",
+          "yt": "7ZlEp_n0UZE"
+        },
+        {
+          "nome": "FLEXÃO DE BRAÇOS COM APOIO DOS JOELHOS",
+          "reps": "40 segundos",
+          "yt": "o9YqagmwIhE"
+        },
+        {
+          "nome": "TRÍCEPS NO BANCO",
+          "reps": "40 segundos",
+          "yt": "qW74kC4-mDg"
+        },
+        {
+          "nome": "ABDOMINAL BOLINHA",
+          "reps": "40 segundos",
+          "yt": "B4iWf8CQ7og"
+        }
+      ],
+      [
+        {
+          "nome": "REMADA CURVADA COM PESO",
+          "reps": "40 segundos",
+          "yt": "U6zGmjo8Pe4"
+        },
+        {
+          "nome": "DESENVOLVIMENTO DE OMBROS COM PESO",
+          "reps": "40 segundos",
+          "yt": "7ZlEp_n0UZE"
+        },
+        {
+          "nome": "FLEXÃO DE BRAÇOS INCLINADA",
+          "reps": "40 segundos",
+          "yt": "du83aLir1oc"
+        },
+        {
+          "nome": "TRÍCEPS NO BANCO",
+          "reps": "40 segundos",
+          "yt": "qW74kC4-mDg"
+        },
+        {
+          "nome": "ABDOMINAL NADADOR",
+          "reps": "40 segundos",
+          "yt": "Kx3MFMVo7bA"
+        }
+      ],
+      [
+        {
+          "nome": "REMADA NA PRANCHA ALTA",
+          "reps": "40 segundos",
+          "yt": "bydIj_-j3Ow"
+        },
+        {
+          "nome": "DESENVOLVIMENTO DE OMBROS COM PESO",
+          "reps": "40 segundos",
+          "yt": "7ZlEp_n0UZE"
+        },
+        {
+          "nome": "FLEXÃO DE BRAÇOS",
+          "reps": "40 segundos",
+          "yt": "arXR8evh42k"
+        },
+        {
+          "nome": "TRÍCEPS NO BANCO",
+          "reps": "40 segundos",
+          "yt": "qW74kC4-mDg"
+        },
+        {
+          "nome": "ABDOMINAL TURCO",
+          "reps": "40 segundos",
+          "yt": "U5gWwlW44oQ"
+        }
+      ]
+    ]
+  },
+  {
+    "titulo": "Treino 4 · Quinta-feira",
+    "subtitulo": "EMOM 20 min",
+    "num": "04",
+    "fmt": "EMOM",
+    "ts": 60,
+    "td": 0,
+    "tl": "Atividade",
+    "semanaLabel": "DESPERTA",
+    "semNum": 1,
+    "aq": [
+      {
+        "nome": "RUSSIAN BABY MAKER",
+        "yt": "yp5PxbgZ7po"
+      },
+      {
+        "nome": "AGACHAMENTO LIVRE 90 GRAUS",
+        "yt": "56QG5WpSXYc"
+      },
+      {
+        "nome": "ELEVAÇÃO DE QUADRIL",
+        "yt": "aaXJ7TSwpqk"
+      },
+      {
+        "nome": "PRANCHA ALTA",
+        "yt": "7gxyxWFlmqA"
+      },
+      {
+        "nome": "POLICHINELOS SEM IMPACTO",
+        "yt": "xtP-2XQIGqs"
+      }
+    ],
+    "n": [
+      [
+        {
+          "nome": "MINUTO 1 — AGACHAMENTO SUMO COM PESO CORPORAL",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "pe1PVooyEGE"
+        },
+        {
+          "nome": "MINUTO 2 — SWING COM PESO",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "1BD_TycX7pQ"
+        },
+        {
+          "nome": "MINUTO 3 — SUPERMAN",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "ndS1RHGNILg"
+        },
+        {
+          "nome": "MINUTO 4 — ABDOMINAL BOLINHA",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "B4iWf8CQ7og"
+        }
+      ],
+      [
+        {
+          "nome": "MINUTO 1 — AGACHAMENTO SUMO COM PESO",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "fplHziPpIkA"
+        },
+        {
+          "nome": "MINUTO 2 — SWING COM PESO",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "1BD_TycX7pQ"
+        },
+        {
+          "nome": "MINUTO 3 — SUPERMAN",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "ndS1RHGNILg"
+        },
+        {
+          "nome": "MINUTO 4 — ABDOMINAL REMADOR",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "nDlwrq8yaPk"
+        }
+      ],
+      [
+        {
+          "nome": "MINUTO 1 — AGACHAMENTO SUMO COM PESO",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "fplHziPpIkA"
+        },
+        {
+          "nome": "MINUTO 2 — SWING COM PESO",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "1BD_TycX7pQ"
+        },
+        {
+          "nome": "MINUTO 3 — PUXADA NO SUPERMAN",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "U2UeMMPlVDc"
+        },
+        {
+          "nome": "MINUTO 4 — ABDOMINAL CANOINHA",
+          "reps": "12 repetições · descanse o tempo que sobrar",
+          "yt": "9HQaH0Qt8Fk"
+        }
+      ]
+    ]
+  },
+  {
+    "titulo": "Treino 5 · Sexta-feira",
+    "subtitulo": "50s × 10s",
+    "num": "05",
+    "fmt": "50x10",
+    "ts": 50,
+    "td": 10,
+    "tl": "Atividade",
+    "semanaLabel": "DESPERTA",
+    "semNum": 1,
+    "aq": [
+      {
+        "nome": "CÓCORAS",
+        "yt": "7dDHOvOnQH0"
+      },
+      {
+        "nome": "BOM DIA COM BASTÃO",
+        "yt": "rXVnChClE5U"
+      },
+      {
+        "nome": "PRANCHA INVERTIDA",
+        "yt": "g8jDh8JNcvY"
+      },
+      {
+        "nome": "GIROS COM OS BRAÇOS PARA FRENTE",
+        "yt": "0AUqwZ4dIVQ"
+      },
+      {
+        "nome": "POLICHINELOS SEM IMPACTO",
+        "yt": "xtP-2XQIGqs"
+      }
+    ],
+    "n": [
+      [
+        {
+          "nome": "AGACHAMENTO COM DESENVOLVIMENTO 90 GRAUS",
+          "reps": "50 segundos",
+          "yt": "_hYIn1lYDx0"
+        },
+        {
+          "nome": "ELEVAÇÃO LATERAL",
+          "reps": "50 segundos",
+          "yt": "hKpG5hBN6B8"
+        },
+        {
+          "nome": "ELEVAÇÃO DE QUADRIL UNILATERAL",
+          "reps": "50 segundos lado direito",
+          "yt": "m5c4szTJFSw"
+        },
+        {
+          "nome": "ELEVAÇÃO DE QUADRIL UNILATERAL",
+          "reps": "50 segundos lado esquerdo",
+          "yt": "m5c4szTJFSw"
+        },
+        {
+          "nome": "ABDOMINAL CURTINHO",
+          "reps": "50 segundos",
+          "yt": "i3tNCeXAXu8"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO COM DESENVOLVIMENTO COM PESO",
+          "reps": "50 segundos",
+          "yt": "cV_Luyaz-m4"
+        },
+        {
+          "nome": "STEP SOBE-DESCE",
+          "reps": "50 segundos",
+          "yt": "ENA0W3ey5dk"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA UNILATERAL NO BANCO",
+          "reps": "50 segundos lado direito",
+          "yt": "ratJ2Sdcw9A"
+        },
+        {
+          "nome": "ELEVAÇÃO PÉLVICA UNILATERAL NO BANCO",
+          "reps": "50 segundos lado esquerdo",
+          "yt": "ratJ2Sdcw9A"
+        },
+        {
+          "nome": "ABDOMINAL RUSSIAN TWIST",
+          "reps": "50 segundos",
+          "yt": "eAz20s6bGHE"
+        }
+      ],
+      [
+        {
+          "nome": "AGACHAMENTO COM DESENVOLVIMENTO UNILATERAL",
+          "reps": "50 segundos lado direito",
+          "yt": "cV_Luyaz-m4"
+        },
+        {
+          "nome": "AGACHAMENTO COM DESENVOLVIMENTO UNILATERAL",
+          "reps": "50 segundos lado esquerdo",
+          "yt": "cV_Luyaz-m4"
+        },
+        {
+          "nome": "STEP SOBE-DESCE",
+          "reps": "50 segundos",
+          "yt": "ENA0W3ey5dk"
+        },
+        {
+          "nome": "SUPINO COM PESO",
+          "reps": "50 segundos",
+          "yt": "gStFaDsTGWs"
+        },
+        {
+          "nome": "ABDOMINAL CANIVETE",
+          "reps": "50 segundos",
+          "yt": "Js5w1k4hxFw"
+        }
+      ]
+    ]
+  }
+];
+
+// Adicionar aquecimento como primeiro "treino" de cada dia
+// O aquecimento usa os mesmos 5 exercícios para todos os níveis
+
+const INSTRUCOES = {
+  "45X15": {
+    tipo: "45s × 15s",
+    titulo: "45 segundos de trabalho, 15 de descanso",
+    itens: [
+      { icon: "⏱️", texto: "Execute cada exercício por <strong>45 segundos contínuos</strong>." },
+      { icon: "😮‍💨", texto: "<strong>15 segundos de descanso</strong> entre cada exercício para a transição." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "💪", texto: "Encontre um ritmo que consiga <strong>manter em todos os rounds</strong>, focando na qualidade." },
+      { icon: "⚠️", texto: "Se a postura falhar, <strong>diminua o ritmo</strong> ou faça apenas 3 rounds." },
+    ]
+  },
+  "30X30": {
+    tipo: "30s × 30s",
+    titulo: "Intensidade máxima nos 30 segundos!",
+    itens: [
+      { icon: "🔥", texto: "O objetivo é <strong>intensidade máxima</strong> nos 30 segundos de trabalho!" },
+      { icon: "😮‍💨", texto: "<strong>30 segundos de descanso</strong> para recuperar e se preparar para a próxima estação." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "📈", texto: "Tente o <strong>maior número de repetições com qualidade</strong> em cada intervalo." },
+      { icon: "💪", texto: "<strong>Mantenha o esforço alto</strong> em todos os rounds." },
+    ]
+  },
+  "40X20": {
+    tipo: "40s × 20s",
+    titulo: "Ritmo forte por 40 segundos",
+    itens: [
+      { icon: "⏱️", texto: "Execute o <strong>maior número de repetições com qualidade</strong> durante os 40 segundos." },
+      { icon: "😮‍💨", texto: "<strong>20 segundos de descanso</strong> para transição e respiração." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "💪", texto: "Encontre um <strong>ritmo forte que consiga sustentar</strong> em todos os rounds." },
+      { icon: "⚠️", texto: "Se a postura falhar, <strong>diminua o ritmo</strong> mas não pare." },
+    ]
+  },
+  "50X10": {
+    tipo: "50s × 10s",
+    titulo: "O formato mais desafiador da semana!",
+    itens: [
+      { icon: "🔥", texto: "<strong>50 segundos de trabalho</strong> com apenas 10 segundos de descanso!" },
+      { icon: "💪", texto: "Escolha um ritmo que consiga <strong>sustentar do início ao fim</strong>." },
+      { icon: "⚡", texto: "Os <strong>10 segundos são só para a transição</strong> — não dá pra descansar de verdade!" },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "⚠️", texto: "Se a postura falhar, <strong>diminua o ritmo mas não pare</strong>." },
+    ]
+  },
+  EMOM: {
+    tipo: "EMOM · Every Minute on the Minute",
+    titulo: "A cada minuto, 12 repetições",
+    itens: [
+      { icon: "⏱️", texto: "A cada minuto você faz <strong>12 repetições</strong> do exercício indicado e descansa o tempo que sobrar." },
+      { icon: "🏆", texto: "<strong>Quanto mais rápida e eficiente</strong> você for, mais tempo de descanso você ganha!" },
+      { icon: "😮‍💨", texto: "Após os 4 exercícios, o <strong>5º minuto é descanso completo</strong> antes de recomeçar." },
+      { icon: "🔁", texto: "Repete por <strong>4 voltas = 20 minutos</strong> no total." },
+      { icon: "⚠️", texto: "Se não conseguir 12 reps em 1 minuto, <strong>reduza para 10</strong> e mantenha o ritmo." },
+    ]
+  },
+  AQUECIMENTO: {
+    tipo: "Aquecimento · 5 minutos",
+    titulo: "Prepare o corpo para o treino",
+    itens: [
+      { icon: "🔥", texto: "<strong>2 rounds</strong> com <strong>30 segundos</strong> em cada exercício." },
+      { icon: "💨", texto: "Respire fundo e <strong>aqueça as articulações</strong> com movimentos suaves." },
+      { icon: "⚡", texto: "Não precisa de intensidade máxima — o objetivo é <strong>preparar o corpo</strong> para o esforço." },
+      { icon: "▶️", texto: "O timer vai avançar automaticamente. <strong>Clique no vídeo</strong> para ver como fazer cada exercício." },
+    ]
+  },
+  AMRAP: {
+    tipo: "AMRAP · 20 minutos",
+    titulo: "Força e resistência",
+    itens: [
+      { icon: "⏳", texto: "O cronômetro <strong>conta de 0 até 20 minutos</strong>. Durante esse tempo, execute o <strong>maior número de séries</strong> possível de cada exercício, em sequência." },
+      { icon: "🔁", texto: "Faça <strong>10 a 12 repetições</strong> de cada exercício com qualidade." },
+      { icon: "😮‍💨", texto: "Após terminar as repetições, <strong>descanse 1 minuto</strong> antes de iniciar o próximo exercício. Use o cronômetro como referência (você mesma controla o intervalo)." },
+      { icon: "🏋️", texto: "Use a <strong>maior carga disponível</strong> que permita manter a postura — o objetivo é trabalhar <strong>força e resistência</strong> em cada movimento." },
+      { icon: "🔄", texto: "Quando terminar os 4 exercícios, <strong>volte para o 1º e recomece</strong>. Continue até o cronômetro chegar em 20 minutos." },
+      { icon: "📝", texto: "<strong>Anote quantas voltas completas</strong> você fez e tente superar nas próximas semanas." },
+    ]
+  },
+  AMRAP3: {
+    tipo: "AMRAP · 3 blocos × 5 min",
+    titulo: "Full Body · 3 blocos de 5 minutos + prancha",
+    itens: [
+      { icon: "🔥", texto: "Cada bloco tem <strong>2 exercícios</strong>. Complete o maior número de voltas possível nos 5 minutos, alternando os 2 exercícios." },
+      { icon: "🔁", texto: "<strong>Bilaterais = 10 reps · Unilaterais = 10 reps por lado · Explosivos = 8 reps</strong>." },
+      { icon: "😮‍💨", texto: "Após o bloco, <strong>2 minutos de descanso automáticos</strong> antes do próximo bloco começar." },
+      { icon: "💪", texto: "Após o 3º bloco, <strong>vá direto para a prancha</strong> (1 minuto) — sem intervalo." },
+      { icon: "📝", texto: "<strong>Anote quantas voltas</strong> completou em cada bloco." },
+    ]
+  },
+  AMRAP2: {
+    tipo: "AMRAP · 2 blocos × 8 min",
+    titulo: "Full Body · 2 blocos de 8 minutos + prancha",
+    itens: [
+      { icon: "🔥", texto: "Cada bloco tem <strong>2 exercícios</strong>. Complete o maior número de voltas possível nos 8 minutos, alternando os 2 exercícios." },
+      { icon: "🔁", texto: "<strong>Bilaterais = 10 reps · Unilaterais = 10 reps por lado · Explosivos = 8 reps</strong>." },
+      { icon: "😮‍💨", texto: "Após o bloco, <strong>2 minutos de descanso automáticos</strong> antes do próximo bloco começar." },
+      { icon: "💪", texto: "Após o 2º bloco, <strong>vá direto para a prancha</strong> (2 minutos) — sem intervalo." },
+      { icon: "📝", texto: "<strong>Anote quantas voltas</strong> completou em cada bloco." },
+    ]
+  },
+  "1MIN": {
+    tipo: "1 min × 1 min",
+    titulo: "1 minuto de trabalho, 1 de descanso",
+    itens: [
+      { icon: "⏱️", texto: "Execute cada exercício por <strong>1 minuto completo</strong>." },
+      { icon: "😮‍💨", texto: "<strong>Descanse 1 minuto</strong> antes do próximo exercício." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 2 voltas</strong>." },
+      { icon: "📈", texto: "Tente <strong>manter ou superar</strong> o número de repetições do primeiro round." },
+      { icon: "⚠️", texto: "Se a postura falhar, <strong>reduza o ritmo</strong> mas não pare!" },
+    ]
+  },
+  TABATA: {
+    tipo: "Tabata · HIIT",
+    titulo: "5 blocos de 4 minutos",
+    itens: [
+      { icon: "🔥", texto: "O treino tem <strong>5 blocos</strong>. Em cada bloco você faz o mesmo exercício." },
+      { icon: "⚡", texto: "<strong>8 rounds</strong> de <strong>20 segundos de atividade</strong> + <strong>10 segundos de descanso</strong>." },
+      { icon: "💪", texto: "Objetivo: <strong>intensidade máxima</strong> nos 20 segundos de trabalho!" },
+      { icon: "➡️", texto: "Os blocos seguem <strong>direto um após o outro</strong>, sem pausa adicional entre eles." },
+      { icon: "🏆", texto: "Tente o <strong>maior número de repetições com qualidade</strong> em cada intervalo." },
+    ]
+  },
+  "45x15": {
+    tipo: "45s × 15s · 4 rounds",
+    titulo: "Trabalho com foco na qualidade",
+    itens: [
+      { icon: "⏱️", texto: "<strong>45 segundos de atividade</strong> seguidos de <strong>15 segundos de descanso</strong>." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "🎯", texto: "Encontre um ritmo que consiga <strong>repetir em todos os rounds</strong> com qualidade." },
+      { icon: "⚠️", texto: "Se a postura falhar, <strong>diminua o ritmo</strong> ou faça apenas 3 rounds." },
+    ]
+  },
+  "30x30": {
+    tipo: "30s × 30s · 4 rounds",
+    titulo: "Intensidade máxima nos 30 segundos",
+    itens: [
+      { icon: "⚡", texto: "<strong>30 segundos de intensidade máxima</strong> seguidos de <strong>30 segundos de descanso</strong>." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "💪", texto: "Tente o <strong>maior número de repetições com qualidade</strong> em cada intervalo." },
+      { icon: "😮‍💨", texto: "O descanso de 30 segundos é para <strong>recuperar e se preparar</strong> para a próxima estação." },
+    ]
+  },
+  "40x20": {
+    tipo: "40s × 20s · 4 rounds",
+    titulo: "Ritmo forte e sustentado",
+    itens: [
+      { icon: "⏱️", texto: "<strong>40 segundos de atividade</strong> seguidos de <strong>20 segundos de descanso</strong>." },
+      { icon: "🔁", texto: "Complete os <strong>5 exercícios e repita por 4 rounds</strong>." },
+      { icon: "🎯", texto: "Realize o <strong>maior número de repetições com qualidade</strong> durante os 40 segundos." },
+      { icon: "💨", texto: "Os 20 segundos são para <strong>transição e respiração</strong>." },
+    ]
+  },
+  "50x10": {
+    tipo: "50s × 10s · 4 rounds",
+    titulo: "O formato mais desafiador!",
+    itens: [
+      { icon: "🔥", texto: "<strong>50 segundos de trabalho</strong> com apenas <strong>10 segundos de descanso</strong>!" },
+      { icon: "🎯", texto: "Mantenha a <strong>qualidade do movimento</strong> mesmo com o descanso reduzido." },
+      { icon: "⚡", texto: "Escolha um ritmo que consiga <strong>sustentar do início ao fim</strong>." },
+      { icon: "😅", texto: "Os 10 segundos são só para a transição — <strong>não dá pra descansar de verdade</strong>!" },
+    ]
+  },
+  EMOM: {
+    tipo: "EMOM · Every Minute On the Minute",
+    titulo: "A cada minuto, um exercício",
+    itens: [
+      { icon: "⏱️", texto: "A cada minuto realize <strong>12 repetições</strong> do exercício indicado." },
+      { icon: "😎", texto: "<strong>Descanse o tempo que sobrar</strong> até o próximo minuto começar." },
+      { icon: "💡", texto: "Quanto mais rápida e eficiente você for, <strong>mais descanso você ganha!</strong>" },
+      { icon: "🔁", texto: "Após os 4 exercícios, o <strong>5º minuto é descanso completo</strong>. Repete por 4 voltas." },
+      { icon: "⚠️", texto: "Se não conseguir 12 reps em 1 minuto, <strong>reduza para 10</strong> e mantenha o ritmo." },
+    ]
+  },
+};
+
+const C=2*Math.PI*58;
+let nv=0,ta=null,ea=0,fase='cond'; // fase: 'aq' ou 'cond'
+let descansoAtivo=false; // true durante o intervalo de descanso entre exercícios
+let iv=null,ts=60,tt=60,tr=false;
+
+// Audio — unlockAudio() chamado no primeiro toque
+let ac=null;
+function unlockAudio(){
+  if(!ac){
+    ac=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g);g.connect(ac.destination);
+    g.gain.setValueAtTime(0,ac.currentTime);
+    o.start(ac.currentTime);o.stop(ac.currentTime+0.001);
+  } else if(ac.state==='suspended'){ac.resume();}
+}
+function bp(f,i,d,v=0.3){
+  if(!ac)return; // sem áudio se não desbloqueado
+  const o=ac.createOscillator(),g=ac.createGain();
+  o.connect(g);g.connect(ac.destination);
+  o.frequency.value=f;o.type='sine';
+  g.gain.setValueAtTime(v,ac.currentTime+i);
+  g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+i+d);
+  o.start(ac.currentTime+i);o.stop(ac.currentTime+i+d+0.05);
+}
+function bfim(){bp(784,0,.15,.8);bp(784,.2,.15,.8);bp(784,.4,.15,.8);bp(1047,.65,.6,.9);}
+function bal(){bp(880,0,.15,.7);}
+
+function setNivel(n){nv=n;document.querySelectorAll('.nivel-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+const NIVEIS_LABEL = ['INICIANTE', 'INTERMEDIÁRIA', 'AVANÇADA'];
+
+// ── AMRAP3 ──────────────────────────────────────────────────────────────────
+// Estrutura: blocos = [[ex1, ex2], [ex1, ex2], [ex1, ex2], [prancha]]
+// Cada bloco tem timer de 5min (300s), seguido de 2min descanso (120s)
+// VARIANTE A: 3 blocos × 5min + 1min prancha (T1, T2)
+// VARIANTE B: 2 blocos × 8min + 2min prancha (T3)
+// Detecção: 7 exercícios → variante A; 5 exercícios → variante B
+
+let amrap3Bloco = 0;
+let amrap3Fase = 'treino'; // 'treino' ou 'descanso'
+
+function getAmrap3Blocos(){
+  const exs = T[ta].n[nv];
+  const blocos = [];
+  for(let i=0; i<exs.length; i+=2){
+    if(i+1 < exs.length) blocos.push([exs[i], exs[i+1]]);
+    else blocos.push([exs[i]]);
+  }
+  return blocos;
+}
+
+// Retorna nº de blocos "reais" (sem contar a prancha final)
+function getAmrapNBlocosReais(){
+  const blocos = getAmrap3Blocos();
+  const last = blocos[blocos.length-1];
+  // Prancha = último bloco com 1 exercício cujo NOME contém "prancha"
+  if(last && last.length === 1 && last[0].nome && last[0].nome.toLowerCase().includes('prancha')){
+    return blocos.length - 1;
+  }
+  return blocos.length;
+}
+
+// Config dinâmica conforme variante
+function getAmrapConfig(){
+  const nReais = getAmrapNBlocosReais();
+  if(nReais === 2){
+    return { blocoSec: 480, blocoMin: 8, pranchaSec: 120, pranchaMin: 2, ultimoLabel: '2º' };
+  }
+  return { blocoSec: 300, blocoMin: 5, pranchaSec: 60, pranchaMin: 1, ultimoLabel: '3º' };
+}
+
+// Escolhe a chave de INSTRUCOES correta para o formato atual
+function getFmtKey(){
+  const f = T[ta].fmt || 'AMRAP';
+  if(f === 'AMRAP3' && getAmrapNBlocosReais() === 2) return 'AMRAP2';
+  return f;
+}
+
+function renderAmrap3(){
+  const blocos = getAmrap3Blocos();
+  const bloco = blocos[amrap3Bloco];
+  const totalBlocos = blocos.length;
+  const ehPrancha = amrap3Bloco === totalBlocos - 1 && bloco.length === 1;
+  const cfg = getAmrapConfig();
+
+  // Esconder card normal e carrossel, mostrar card AMRAP3
+  document.getElementById('ex-card').style.display = 'none';
+  document.getElementById('ex-carousel-wrap').classList.remove('show');
+  const exCardA3 = document.getElementById('ex-card-amrap3');
+  exCardA3.classList.remove('hidden');
+  // Sempre esconder btn-pular no condicionamento AMRAP3
+  document.getElementById('btn-pular').style.display = 'none';
+
+  // Progresso (1 dot por bloco)
+  document.getElementById('progresso').innerHTML = blocos.map((_,i) =>
+    `<div class="prog-dot ${i<amrap3Bloco?'done':i===amrap3Bloco?'current':''}"></div>`
+  ).join('');
+
+  if(ehPrancha){
+    // Prancha final - usa card normal
+    document.getElementById('ex-card-amrap3').classList.add('hidden');
+    const exCard = document.getElementById('ex-card');
+    exCard.style.display = 'block';
+    exCard.querySelector('.video-wrap').style.display = 'block';
+    document.getElementById('ex-numero').textContent = `PRANCHA FINAL · ${cfg.pranchaMin} ${cfg.pranchaMin===1?'minuto':'minutos'}`;
+    document.getElementById('ex-nome').textContent = bloco[0].nome;
+    // Se for Prancha Lateral, indicar lados
+    const nomeLow = bloco[0].nome.toLowerCase();
+    if(nomeLow.includes('lateral')){
+      const lado = Math.round(cfg.pranchaSec/2);
+      const labelLado = lado === 60 ? '60s' : (lado + 's');
+      document.getElementById('ex-instrucao').textContent =
+        `${labelLado} lado direito + ${labelLado} lado esquerdo. Segure cada lado pelo tempo completo.`;
+    } else {
+      document.getElementById('ex-instrucao').textContent = 'Segure a posição pelo tempo completo.';
+    }
+    const f0 = document.getElementById('video-frame');
+    f0.classList.add('hidden'); f0.src='';
+    document.getElementById('video-placeholder').classList.remove('hidden');
+    document.getElementById('timer-label').textContent = 'PRANCHA';
+    document.getElementById('timer-label').classList.remove('descanso');
+    pT(); ts=cfg.pranchaSec; tt=cfg.pranchaSec; uD();
+    document.getElementById('timer-status').textContent='Pressione iniciar quando estiver pronta';
+    document.getElementById('btn-principal').textContent='Iniciar';
+    document.getElementById('lista-card').style.display = '';
+    document.getElementById('lista-items').innerHTML =
+      `<div class="lista-item" onclick="abrirVideoModal('${bloco[0].yt}','${bloco[0].nome.replace(/'/g,"\\'")}')"><div class="lista-num">1</div><div class="lista-info"><div class="lista-nome">${bloco[0].nome}</div><div class="lista-reps">${cfg.pranchaMin} ${cfg.pranchaMin===1?'minuto':'minutos'} isométrico</div></div></div>`;
+    return;
+  }
+
+  // Bloco normal: 2 exercícios em formato carrossel
+  document.getElementById('amrap3-bloco-label').textContent =
+    `BLOCO ${amrap3Bloco+1} de ${getAmrapNBlocosReais()} · ${cfg.blocoMin} minutos · AMRAP`;
+
+  // Renderizar os 2 exercícios do bloco no ex-carousel
+  exCardA3.classList.add('hidden'); // esconde estrutura antiga
+  document.getElementById('ex-card').style.display = 'none';
+  const carouselWrap = document.getElementById('ex-carousel-wrap');
+  carouselWrap.classList.add('show');
+  // Atualizar hint do carrossel com info do bloco
+  document.getElementById('ex-carousel-hint').innerHTML =
+    `BLOCO ${amrap3Bloco+1} de ${getAmrapNBlocosReais()} · ${cfg.blocoMin} min · AMRAP &nbsp;&nbsp;<span class="arrow">→</span>`;
+  const carousel = document.getElementById('ex-carousel');
+  const dots = document.getElementById('ex-carousel-dots');
+  // Mostrar o cabeçalho do bloco acima do carrossel
+  carousel.innerHTML = bloco.map((e, i) => `
+    <div class="ex-carousel-card current" data-idx="${i}">
+      <div class="ex-carousel-card-header">
+        <span class="ex-carousel-card-tag atual">EXERCÍCIO ${i+1}</span>
+        <span class="ex-carousel-card-nome">${e.nome}</span>
+      </div>
+      <div class="ex-carousel-card-reps">${e.reps || ''}</div>
+      <div class="video-wrap">
+        <div class="video-placeholder" id="ex-carousel-placeholder-${i}" onclick="abrirVideoCarouselIdx(${i})">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <p>Ver exercício</p>
+        </div>
+        <iframe id="ex-carousel-frame-${i}" class="hidden" allow="autoplay;encrypted-media" allowfullscreen></iframe>
+      </div>
+    </div>
+  `).join('');
+  dots.innerHTML = bloco.map((_, i) => `<div class="ex-carousel-dot${i===0?' active':''}" data-idx="${i}"></div>`).join('');
+  // Reset scroll do carrossel pra mostrar o primeiro
+  carousel.scrollLeft = 0;
+  carousel.onscroll = () => {
+    const cardW = carousel.offsetWidth;
+    const idx = Math.round(carousel.scrollLeft / cardW);
+    dots.querySelectorAll('.ex-carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+    });
+  };
+  // Override do abrirVideoCarouselIdx pra usar o bloco atual (precisa de uma referência aos exercícios do bloco)
+  window.__amrap3BlocoAtual = bloco;
+
+  document.getElementById('timer-label').textContent = `BLOCO ${amrap3Bloco+1}`;
+  document.getElementById('timer-label').classList.remove('descanso');
+  pT(); ts=cfg.blocoSec; tt=cfg.blocoSec; uD();
+  document.getElementById('timer-status').textContent='Pressione iniciar quando estiver pronta';
+  document.getElementById('btn-principal').textContent='Iniciar';
+  document.getElementById('lista-card').style.display = '';
+  document.getElementById('lista-items').innerHTML = `
+    <div class="lista-item" onclick="abrirVideoModal('${bloco[0].yt}','${bloco[0].nome.replace(/'/g,"\\'")}')"><div class="lista-num">1</div><div class="lista-info"><div class="lista-nome">${bloco[0].nome}</div><div class="lista-reps">${bloco[0].reps}</div></div></div>
+    <div class="lista-item" onclick="abrirVideoModal('${bloco[1].yt}','${bloco[1].nome.replace(/'/g,"\\'")}')"><div class="lista-num">2</div><div class="lista-info"><div class="lista-nome">${bloco[1].nome}</div><div class="lista-reps">${bloco[1].reps}</div></div></div>
+  `;
+}
+
+function abrirVideoIdx(idx){
+  const bloco = getAmrap3Blocos()[amrap3Bloco];
+  if(!bloco || !bloco[idx]) return;
+  const ph = document.getElementById('amrap3-placeholder-'+idx);
+  const fr = document.getElementById('amrap3-frame-'+idx);
+  ph.classList.add('hidden');
+  fr.classList.remove('hidden');
+  fr.src = 'https://www.youtube.com/embed/'+bloco[idx].yt+'?autoplay=1&rel=0';
+}
+
+function avançarAmrap3(){
+  const blocos = getAmrap3Blocos();
+  const ehPrancha = amrap3Bloco === blocos.length - 1 && blocos[amrap3Bloco].length === 1;
+
+  if(ehPrancha){
+    // Fim do treino
+    document.getElementById('tela-treino').style.display='none';
+    document.getElementById('tela-final').style.display='flex';setTimeout(function(){if(window.__alinharLogos)window.__alinharLogos();},80);
+    return;
+  }
+
+  if(amrap3Fase === 'treino'){
+    // Terminou bloco
+    const proximoBloco = blocos[amrap3Bloco + 1];
+    const proximoEhPrancha = proximoBloco && proximoBloco.length === 1;
+    if(proximoEhPrancha){
+      // Próximo é a prancha → vai direto (sem descanso)
+      amrap3Bloco++;
+      amrap3Fase = 'treino';
+      renderAmrap3();
+    } else {
+      // Tem próximo bloco normal → descanso INTEGRADO (mesmo card, vídeos visíveis)
+      amrap3Fase = 'descanso';
+      iniciarDescansoAmrap3Inline();
+    }
+  } else {
+    // amrap3Fase === 'descanso' → avançar pro próximo bloco e auto-iniciar
+    amrap3Bloco++;
+    amrap3Fase = 'treino';
+    renderAmrap3();
+    setTimeout(() => { if(!tr) iT_direto(); }, 300);
+  }
+}
+
+function iniciarDescansoAmrap3Inline(){
+  // Mesmo card do bloco atual, mas timer vira "DESCANSO 2min" e auto-inicia
+  const nReais = getAmrapNBlocosReais();
+  document.getElementById('amrap3-bloco-label').textContent =
+    `DESCANSO · PRÓXIMO: BLOCO ${amrap3Bloco+2} de ${nReais}`;
+  document.getElementById('timer-label').textContent = 'DESCANSO';
+  document.getElementById('timer-label').classList.add('descanso');
+  ts = 120; tt = 120;
+  uD();
+  // Auto-iniciar sem countdown
+  tr = true;
+  document.getElementById('btn-principal').textContent = 'Pausar';
+  document.getElementById('timer-status').textContent = 'Descansando...';
+  iv = setInterval(() => {
+    ts--; uD();
+    if(ts<=3 && ts>0) bal();
+    if(ts<=0){
+      clearInterval(iv); tr=false; bfim();
+      if(navigator.vibrate) navigator.vibrate([150,80,150,80,300]);
+      avançarAmrap3();
+    }
+  }, 1000);
+}
+
+function renderInicio(){
+  document.getElementById('treinos-grid').innerHTML=T.map((t,i)=>`
+    <div class="treino-card" onclick="abrirTreino(${i})">
+      <div class="treino-num">${t.num}</div>
+      <div class="treino-info"><h3>${t.titulo}</h3><p>${t.subtitulo}</p></div>
+      <div class="treino-arrow">›</div>
+    </div>`).join('');
+}
+
+// etapa: 'aq_instrucao' | 'aq' | 'cond_instrucao' | 'cond'
+let etapa = 'aq_instrucao';
+let roundAtual = 1;
+let totalRounds = 1;
+
+function mostrarInstrucao(chave){
+  const instr = INSTRUCOES[chave];
+  if (!instr) return;
+  document.getElementById('instr-tipo').textContent = instr.tipo;
+  document.getElementById('instr-titulo').textContent = instr.titulo;
+  // Dica universal sobre clicar nos exercícios para ver vídeos antes
+  const dicaVideo = {
+    icon: "👆",
+    texto: "Quer ver um exercício antes de começar? <strong>Toque no nome do exercício na lista</strong> abaixo do cronômetro para abrir o vídeo."
+  };
+  // Dica de pacing — só pros formatos intervalados (atividade × descanso)
+  const formatosComPacing = ['30x30', '40x20', '45x15', '50x10', '1MIN', 'TABATA'];
+  const itens = [dicaVideo, ...instr.itens];
+  if(formatosComPacing.includes(chave)){
+    itens.push({
+      icon: "⏸️",
+      texto: "Não consegue manter o movimento contínuo? <strong>Tudo bem fazer com pequenas pausas dentro do tempo</strong> de atividade. No primeiro round, sinta seu ritmo e defina um <strong>número de repetições como meta</strong> para tentar manter ou superar nos próximos rounds."
+    });
+  }
+  document.getElementById('instr-cards').innerHTML = itens.map(it =>
+    `<div class="instr-card"><div class="instr-text">${it.texto}</div></div>`
+  ).join('');
+  document.getElementById('tela-inicio').style.display = 'none';
+  document.getElementById('tela-treino').style.display = 'none';
+  document.getElementById('tela-final').style.display = 'none';
+  document.getElementById('tela-instrucao').style.display = 'flex';
+}
+
+function abrirTreino(i){
+  ta = i;
+  etapa = 'aq_instrucao';
+  // Atualizar header-sub na tela inicial
+  const headerSub = document.getElementById('header-sub');
+  if(headerSub){
+    headerSub.textContent = ((T[i].semanaLabel === ('SEMANA ' + T[i].semNum)) ? ('SEMANA ' + T[i].semNum) : (T[i].semanaLabel + ' · SEMANA ' + T[i].semNum)) + ' · TREINO ' + (i+1) + ' · ' + NIVEIS_LABEL[nv];
+  }
+  // Atualizar badge de treino na tela de instrução e treino
+  const treinoBadge = document.getElementById('treino-badge');
+  if(treinoBadge){
+    treinoBadge.textContent = ((T[i].semanaLabel === ('SEMANA ' + T[i].semNum)) ? ('SEMANA ' + T[i].semNum) : (T[i].semanaLabel + ' · SEMANA ' + T[i].semNum)) + ' · TREINO ' + (i+1) + ' · ' + NIVEIS_LABEL[nv];
+  }
+  mostrarInstrucao('AQUECIMENTO');
+}
+
+function comecarTreino(){
+  unlockAudio(); ac && ac.state==='suspended' && ac.resume();
+  // Se AMRAP3, inicializar estado
+  if(T[ta].fmt==='AMRAP3'){
+    amrap3Bloco=0; amrap3Fase='treino';
+  }
+  const badge = ((T[ta].semanaLabel === ('SEMANA ' + T[ta].semNum)) ? ('SEMANA ' + T[ta].semNum) : (T[ta].semanaLabel + ' · SEMANA ' + T[ta].semNum)) + ' · TREINO ' + (ta+1) + ' · ' + NIVEIS_LABEL[nv];
+  if (etapa === 'aq_instrucao') {
+    etapa = 'aq';
+    ea = 0; fase = 'aq';
+    roundAtual = 1; totalRounds = 2;
+    document.getElementById('tela-instrucao').style.display = 'none';
+    document.getElementById('tela-treino').style.display = 'flex';
+    document.getElementById('th-titulo').textContent = badge;
+    document.getElementById('th-subtitulo').textContent = 'Aquecimento · 5 min';
+    rEx();
+  } else if (etapa === 'cond_instrucao') {
+    etapa = 'cond';
+    fase = 'cond'; ea = 0;
+    // TABATA: 8 rounds dentro de cada bloco. AMRAP simples: loop infinito (999 rounds). Outros: 4 rounds.
+    roundAtual = 1;
+    if(T[ta].fmt === 'TABATA'){ totalRounds = 8; }
+    else if(T[ta].fmt === 'AMRAP'){ totalRounds = 999; ts = 0; } // forçar reset pra AMRAP simples
+    else { totalRounds = 4; }
+    document.getElementById('tela-instrucao').style.display = 'none';
+    document.getElementById('tela-treino').style.display = 'flex';
+    document.getElementById('th-titulo').textContent = badge;
+    document.getElementById('th-subtitulo').textContent = T[ta].titulo;
+    rEx();
+  }
+}
+
+function voltarInicio(){
+  pT();
+  // Limpar carrossel pra próxima abertura
+  const carousel = document.getElementById('ex-carousel');
+  if(carousel) carousel.innerHTML = '';
+  const cWrap = document.getElementById('ex-carousel-wrap');
+  if(cWrap){ cWrap.removeAttribute('data-fase'); cWrap.removeAttribute('data-treino'); }
+  document.getElementById('tela-treino').style.display='none';
+  document.getElementById('tela-final').style.display='none';
+  document.getElementById('tela-instrucao').style.display='none';
+  document.getElementById('tela-inicio').style.display='flex';
+}
+
+function getExs(){
+  if(fase==='aq') return T[ta].aq.map(e=>(({nome:e.nome,reps:'30 segundos de atividade',yt:e.yt})));
+  return T[ta].n[nv];
+}
+
+function rEx(){
+  // AMRAP3 tem renderização própria
+  if(fase==='cond' && T[ta].fmt==='AMRAP3'){
+    renderAmrap3();
+    return;
+  }
+  // Garantir que cards do AMRAP3 estão escondidos e vídeo do ex-card visível
+  const exCardNormal = document.getElementById('ex-card');
+  const carouselWrap = document.getElementById('ex-carousel-wrap');
+  const ehAmrap3 = T[ta].fmt==='AMRAP3' && fase==='cond';
+  // Carrossel em todos os formatos exceto AMRAP3
+  const usaCarousel = !ehAmrap3;
+  if(usaCarousel){
+    exCardNormal.style.display = 'none';
+    carouselWrap.classList.add('show');
+    // Renderiza carrossel só se não existir ou se a fase mudou
+    const fasePrev = carouselWrap.getAttribute('data-fase');
+    const treinoPrev = carouselWrap.getAttribute('data-treino');
+    const faseAtual = fase + (T[ta].fmt || '');
+    if(fasePrev !== faseAtual || treinoPrev !== String(ta)){
+      renderCarouselExs();
+      carouselWrap.setAttribute('data-fase', faseAtual);
+      carouselWrap.setAttribute('data-treino', String(ta));
+    }
+    // Restaurar hint padrão (caso tenha sido alterado pelo AMRAP3)
+    document.getElementById('ex-carousel-hint').innerHTML = '← Arraste para os lados <span class="arrow">→</span>';
+    // Scroll pra exercício atual
+    scrollCarouselToIdx(ea, true);
+  } else {
+    exCardNormal.style.display = 'block';
+    exCardNormal.querySelector('.video-wrap').style.display = 'block';
+    carouselWrap.classList.remove('show');
+  }
+  document.getElementById('ex-card-amrap3').classList.add('hidden');
+  document.getElementById('lista-card').style.display = '';
+  descansoAtivo = false;
+  const exs=getExs(),ex=exs[ea];
+  const total=exs.length;
+  document.getElementById('progresso').innerHTML=exs.map((_,i)=>`<div class="prog-dot ${i<ea?'done':i===ea?'current':''}"></div>`).join('');
+  let labelHeader;
+  if(fase==='aq'){
+    labelHeader = `Aquecimento ${ea+1} de ${total} · Round ${roundAtual} de ${totalRounds}`;
+  } else if(T[ta].fmt === 'TABATA'){
+    labelHeader = `BLOCO ${ea+1} de ${total} · ROUND ${roundAtual} de ${totalRounds}`;
+  } else if(T[ta].fmt === 'AMRAP'){
+    labelHeader = `AMRAP 20 minutos · ${total} exercícios em sequência`;
+  } else {
+    labelHeader = `Exercício ${ea+1} de ${total} · Round ${roundAtual} de ${totalRounds}`;
+  }
+  document.getElementById('ex-numero').textContent = labelHeader;
+  document.getElementById('ex-nome').textContent=ex.nome;
+  // Info dinâmica: reps + tempo trabalho/descanso (quando aplicável)
+  let instrucao = ex.reps || '';
+  if(fase==='cond' && T[ta].td > 0 && T[ta].ts > 0){
+    const sufix = T[ta].ts + 's trabalho · ' + T[ta].td + 's descanso';
+    // Se reps já é em segundos/minutos, substituir; senão concatenar
+    if(/segundos?|minutos?/i.test(instrucao)){
+      instrucao = sufix;
+    } else {
+      instrucao = instrucao ? (instrucao + ' · ' + sufix) : sufix;
+    }
+  }
+  document.getElementById('ex-instrucao').textContent = instrucao;
+  const f=document.getElementById('video-frame');f.classList.add('hidden');f.src='';
+  document.getElementById('video-placeholder').classList.remove('hidden');
+  pT();
+  // ts inicial: 30s no aquecimento; AMRAP simples: 0 (cresce até 1200); outros usam T[ta].ts
+  if(fase==='aq'){
+    ts=30; tt=ts;
+  } else if(T[ta].fmt==='AMRAP'){
+    // AMRAP simples: ts conta CRESCENTE de 0 até 1200 (20min)
+    // ts já está em algum valor quando passamos por aqui (re-render)
+    if(!ts || ts >= 1200) ts = 0;
+    tt = 1200; // referência fixa pra animação do círculo
+  } else {
+    ts = T[ta].ts; tt = ts;
+  }
+  // Timer-label: pra Tabata, "ROUND X de 8"; pra AMRAP simples, "TEMPO TOTAL"; outros, label padrão
+  if(fase==='cond' && T[ta].fmt === 'TABATA'){
+    document.getElementById('timer-label').textContent = `ROUND ${roundAtual} de ${totalRounds}`;
+  } else if(fase==='cond' && T[ta].fmt === 'AMRAP'){
+    document.getElementById('timer-label').textContent = 'AMRAP 20 MINUTOS';
+  } else {
+    document.getElementById('timer-label').textContent=fase==='aq'?'Atividade':T[ta].tl;
+  }
+  document.getElementById('timer-label').classList.remove('descanso');
+  uD();
+  document.getElementById('timer-status').textContent='Pressione iniciar quando estiver pronta';
+  document.getElementById('btn-principal').textContent='Iniciar';
+  // Botão pular fase
+  const btnPular = document.getElementById('btn-pular');
+  if(fase==='aq'){
+    btnPular.style.display='block';
+    btnPular.textContent='Pular aquecimento → ir para o treino';
+  } else {
+    btnPular.style.display='none';
+  }
+
+  const ehAmrapLivre = fase==='cond' && T[ta].fmt==='AMRAP';
+  document.getElementById('lista-items').innerHTML=exs.map((e,i)=>`
+    <div class="lista-item ${i===ea?'current':(ehAmrapLivre?'':(i<ea?'done':''))}" onclick="iEx(${i})">
+      <div class="lista-num">${ehAmrapLivre?(i+1):(i<ea?'✓':i+1)}</div>
+      <div class="lista-info"><div class="lista-nome">${e.nome}</div><div class="lista-reps">${formatarRepsCompleto(e)}</div></div>
+    </div>`).join('');
+}
+
+function abrirVideo(){
+  const exs=getExs(),yt=exs[ea].yt;
+  if(!yt||yt==='#')return;
+  const ytId=yt.includes('shorts/')?yt.split('shorts/')[1]:yt.includes('youtu.be/')?yt.split('youtu.be/')[1]:yt;
+  const f=document.getElementById('video-frame');
+  f.src=`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+  f.classList.remove('hidden');
+  document.getElementById('video-placeholder').classList.add('hidden');
+}
+
+function acaoPrincipal(){
+  unlockAudio();
+  if(ac && ac.state==='suspended') ac.resume();
+  tr?pT():iT();
+}
+
+function iniciarContagem(callback){
+  const overlay=document.getElementById('countdown-overlay');
+  const numEl=document.getElementById('countdown-num');
+  let count=3;
+  overlay.style.display='flex';
+  numEl.textContent=count;
+  // Bipe de contagem
+  bp(880,0,0.15,0.8);
+  const ci=setInterval(()=>{
+    count--;
+    if(count>0){
+      numEl.textContent=count;
+      // Força re-animação
+      numEl.style.animation='none';
+      numEl.offsetHeight; // reflow
+      numEl.style.animation='pop .8s ease-out';
+      bp(880,0,0.15,0.8);
+    } else {
+      overlay.style.display='none';
+      bp(1047,0,0.25,0.9); // bipe de início
+      clearInterval(ci);
+      callback();
+    }
+  },1000);
+}
+
+function iT(){
+  iniciarContagem(()=>{ iT_direto(); });
+}
+
+function iT_direto(){
+  // Inicia o timer SEM countdown 3-2-1 (usado após descanso pra emendar direto)
+  tr=true;
+  document.getElementById('btn-principal').textContent='Pausar';
+  iv=setInterval(()=>{
+    // AMRAP simples: ts CRESCE até 1200 (20min); outros: ts decresce
+    if(fase==='cond' && T[ta].fmt==='AMRAP'){
+      ts++; uD();
+      if(ts>=1200){
+        clearInterval(iv); tr=false; bfim();
+        if(navigator.vibrate) navigator.vibrate([150,80,150,80,300]);
+        document.getElementById('tela-treino').style.display='none';
+        document.getElementById('tela-final').style.display='flex';setTimeout(function(){if(window.__alinharLogos)window.__alinharLogos();},80);
+      }
+      return;
+    }
+    ts--;uD();
+    if(ts<=3&&ts>0)bal();
+    if(ts<=0){
+      clearInterval(iv);tr=false;bfim();
+      if(navigator.vibrate)navigator.vibrate([150,80,150,80,300]);
+      // AMRAP3 tem fluxo próprio
+      if(fase==='cond' && T[ta].fmt==='AMRAP3'){
+        avançarAmrap3();
+        return;
+      }
+      // TABATA: itera 8 rounds dentro do bloco, depois muda bloco direto (sem descanso longo)
+      if(fase==='cond' && T[ta].fmt==='TABATA'){
+        const exs=getExs();
+        const fimBloco = (roundAtual === totalRounds);
+        const ultimoBloco = (ea === exs.length-1);
+        if(fimBloco && ultimoBloco){
+          // Fim do treino
+          descansoAtivo = false;
+          document.getElementById('tela-treino').style.display='none';
+          document.getElementById('tela-final').style.display='flex';setTimeout(function(){if(window.__alinharLogos)window.__alinharLogos();},80);
+          return;
+        }
+        if(!descansoAtivo){
+          descansoAtivo = true;
+          // Descanso de 10s sempre (entre rounds e entre blocos — segue direto)
+          iniciarDescanso();
+          return;
+        }
+      }
+      // AMRAP simples: timer global zerou → tela final
+      if(fase==='cond' && T[ta].fmt==='AMRAP'){
+        document.getElementById('tela-treino').style.display='none';
+        document.getElementById('tela-final').style.display='flex';setTimeout(function(){if(window.__alinharLogos)window.__alinharLogos();},80);
+        return;
+      }
+      // Auto-descanso para formatos intervalados (45x15, 50x10, 30x30, 40x20, 1x1)
+      // Só rola descanso na fase 'cond' e se houver td > 0
+      if(fase==='cond' && !descansoAtivo && T[ta].td > 0){
+        const exs=getExs();
+        const ehUltimo = (ea === exs.length-1) && (roundAtual === totalRounds);
+        if(!ehUltimo){
+          descansoAtivo = true;
+          iniciarDescanso();
+          return;
+        }
+      }
+      descansoAtivo = false;
+      const exs=getExs();
+      if(ea<exs.length-1){
+        ea++;rEx();
+      } else if(roundAtual < totalRounds){
+        roundAtual++;
+        ea=0;
+        rEx();
+      } else if(fase==='aq'){
+        etapa = 'cond_instrucao';
+        mostrarInstrucao(getFmtKey());
+      } else {
+        document.getElementById('tela-treino').style.display='none';
+        document.getElementById('tela-final').style.display='flex';setTimeout(function(){if(window.__alinharLogos)window.__alinharLogos();},80);
+      }
+    }
+  },1000);
+}
+
+function pT(){clearInterval(iv);tr=false;const b=document.getElementById('btn-principal');if(b)b.textContent='Iniciar';}
+
+function iniciarDescanso(){
+  // Mostra tela de descanso e auto-inicia o timer (sem countdown 3-2-1)
+  const exs = getExs();
+  // Tabata: o próximo exercício é o MESMO bloco (round seguinte)
+  const ehTabata = T[ta].fmt === 'TABATA';
+  const proximo = ehTabata ? exs[ea] :
+    (exs[ea+1] || (roundAtual < totalRounds ? exs[0] : null));
+  // Carrossel: scroll pra o próximo exercício durante o descanso (exceto Tabata que mantém o mesmo bloco)
+  if(T[ta].fmt !== 'AMRAP3' && !ehTabata && proximo){
+    const proximoIdx = (ea+1) >= exs.length ? 0 : (ea+1);
+    setTimeout(() => scrollCarouselToIdx(proximoIdx, false), 50);
+  }
+  const proxLabel = proximo ? proximo.nome : 'Fim do round';
+  document.getElementById('ex-numero').textContent = 'DESCANSO · PRÓXIMO ' + (proximo ? '↓' : '');
+  document.getElementById('ex-nome').textContent = proxLabel;
+  document.getElementById('ex-instrucao').textContent = proximo ? (proximo.reps || '') : '';
+  document.getElementById('timer-label').textContent = 'DESCANSO';
+  document.getElementById('timer-label').classList.add('descanso');
+  // Esconder vídeo durante descanso
+  const exCard = document.getElementById('ex-card');
+  exCard.querySelector('.video-wrap').style.display = 'none';
+  ts = T[ta].td; tt = T[ta].td;
+  uD();
+  // Auto-iniciar timer sem countdown
+  tr = true;
+  document.getElementById('btn-principal').textContent = 'Pausar';
+  document.getElementById('timer-status').textContent = 'Descansando...';
+  iv = setInterval(()=>{
+    ts--; uD();
+    if(ts<=3 && ts>0) bal();
+    if(ts<=0){
+      clearInterval(iv); tr=false; bfim();
+      if(navigator.vibrate) navigator.vibrate([150,80,150,80,300]);
+      // Fim do descanso
+      descansoAtivo = false;
+      // TABATA: ao fim do descanso, decide se avança round (mesmo bloco) ou bloco
+      if(T[ta].fmt === 'TABATA'){
+        if(roundAtual < totalRounds){
+          // Próximo round, mesmo bloco
+          roundAtual++; rEx(); iT_direto();
+        } else {
+          // Round 8 terminou: próximo bloco, round 1
+          ea++; roundAtual = 1; rEx(); iT_direto();
+        }
+        return;
+      }
+      // Outros formatos: avança normalmente
+      const exs2 = getExs();
+      if(ea<exs2.length-1){
+        ea++; rEx(); iT_direto();
+      } else if(roundAtual < totalRounds){
+        roundAtual++; ea=0; rEx(); iT_direto();
+      } else if(fase==='aq'){
+        etapa = 'cond_instrucao';
+        mostrarInstrucao(getFmtKey());
+      } else {
+        document.getElementById('tela-treino').style.display='none';
+        document.getElementById('tela-final').style.display='flex';setTimeout(function(){if(window.__alinharLogos)window.__alinharLogos();},80);
+      }
+    }
+  }, 1000);
+}
+
+function iniciarDescansoTabataBloco(){
+  // Descanso longo de 60s entre blocos da Tabata
+  const exs = getExs();
+  const proximo = exs[ea+1];
+  document.getElementById('ex-numero').textContent = `INTERVALO · PRÓXIMO: BLOCO ${ea+2} de ${exs.length}`;
+  document.getElementById('ex-nome').textContent = proximo ? proximo.nome : 'DESCANSO';
+  document.getElementById('ex-instrucao').textContent = '8 rounds · 20s ativo + 10s descanso';
+  document.getElementById('timer-label').textContent = 'DESCANSO ENTRE BLOCOS';
+  document.getElementById('timer-label').classList.add('descanso');
+  const exCard = document.getElementById('ex-card');
+  exCard.querySelector('.video-wrap').style.display = 'none';
+  ts = 60; tt = 60;
+  uD();
+  tr = true;
+  document.getElementById('btn-principal').textContent = 'Pausar';
+  document.getElementById('timer-status').textContent = 'Descansando entre blocos...';
+  iv = setInterval(()=>{
+    ts--; uD();
+    if(ts<=3 && ts>0) bal();
+    if(ts<=0){
+      clearInterval(iv); tr=false; bfim();
+      if(navigator.vibrate) navigator.vibrate([150,80,150,80,300]);
+      descansoAtivo = false;
+      // Avança bloco e reseta round
+      ea++; roundAtual = 1;
+      rEx(); iT_direto();
+    }
+  }, 1000);
+}
+
+function reiniciarTimer(){
+  pT(); // para o timer
+  // AMRAP3: re-render do bloco/descanso atual
+  if(fase==='cond' && T[ta].fmt==='AMRAP3'){
+    renderAmrap3();
+    return;
+  }
+  // Resetar para o tempo original do exercício atual
+  ts = fase==='aq' ? 30 : T[ta].ts;
+  tt = ts;
+  uD();
+  document.getElementById('timer-status').textContent='Pressione iniciar quando estiver pronta';
+}
+
+function uD(){
+  const m=Math.floor(ts/60),s=ts%60;
+  const el=document.getElementById('timer-display');
+  el.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+  // Alerta visual: AMRAP simples só alerta perto do fim (ts >= 1195); outros formatos alertam ts <= 5
+  const ehAmrapSimples = T[ta] && T[ta].fmt === 'AMRAP' && fase === 'cond';
+  const alertar = ehAmrapSimples ? (ts >= 1195) : (ts <= 5);
+  el.className='timer-num'+(alertar?' alerta':'');
+  // Progresso do círculo: AMRAP enche (ts/tt); outros esvaziam (1 - ts/tt)
+  const offset = ehAmrapSimples ? C*(1-ts/tt) : C*(1-ts/tt);
+  document.getElementById('timer-progress').style.strokeDashoffset = offset;
+  document.getElementById('timer-progress').className='ring-prog'+(alertar?' alerta':'');
+  document.getElementById('timer-status').textContent=tr?(alertar?'Quase lá!':'Em andamento...'):'Pausado';
+}
+
+function pularFase(){
+  pT(); // parar timer
+  etapa = 'cond_instrucao';
+  mostrarInstrucao(getFmtKey());
+}
+
+function proximoEx(){
+  // AMRAP3 tem fluxo próprio
+  if(fase==='cond' && T[ta].fmt==='AMRAP3'){
+    pT();
+    avançarAmrap3();
+    return;
+  }
+  // TABATA: 8 rounds no mesmo bloco; só muda de bloco no fim do round 8
+  if(fase==='cond' && T[ta].fmt==='TABATA'){
+    pT();
+    const e=getExs();
+    if(roundAtual < totalRounds){
+      roundAtual++; rEx();
+    } else if(ea < e.length-1){
+      ea++; roundAtual = 1; rEx();
+    } else {
+      document.getElementById('tela-treino').style.display='none';
+      document.getElementById('tela-final').style.display='flex';setTimeout(function(){if(window.__alinharLogos)window.__alinharLogos();},80);
+    }
+    return;
+  }
+  const e=getExs();
+  if(ea<e.length-1){
+    ea++;rEx();
+  } else if(roundAtual < totalRounds){
+    roundAtual++;ea=0;rEx();
+  } else if(fase==='aq'){
+    etapa='cond_instrucao';
+    mostrarInstrucao(getFmtKey());
+  } else {
+    document.getElementById('tela-treino').style.display='none';
+    document.getElementById('tela-final').style.display='flex';setTimeout(function(){if(window.__alinharLogos)window.__alinharLogos();},80);
+  }
+}
+function anteriorEx(){
+  // TABATA: voltar round dentro do bloco antes de voltar de bloco
+  if(fase==='cond' && T[ta].fmt==='TABATA'){
+    pT();
+    if(roundAtual > 1){
+      roundAtual--; rEx();
+    } else if(ea > 0){
+      ea--; roundAtual = totalRounds; rEx();
+    } else {
+      etapa='aq_instrucao';
+      mostrarInstrucao('AQUECIMENTO');
+    }
+    return;
+  }
+  if(ea>0){
+    ea--;rEx();
+  } else if(roundAtual>1){
+    roundAtual--;ea=getExs().length-1;rEx();
+  } else if(fase==='cond'){
+    // Volta para o aquecimento mostrando instrução
+    etapa='aq_instrucao';
+    mostrarInstrucao('AQUECIMENTO');
+  }
+}
+function iEx(i){
+  const exs = getExs();
+  if(!exs || !exs[i]) return;
+  // AMRAP simples: clicar na lista muda o exercício destacado (livre)
+  if(fase === 'cond' && T[ta].fmt === 'AMRAP'){
+    ea = i;
+    rEx();
+    return;
+  }
+  // Demais formatos com carrossel (não AMRAP3): scroll pro vídeo daquele item sem alterar o atual
+  if(T[ta].fmt !== 'AMRAP3'){
+    scrollCarouselToIdx(i, false);
+    return;
+  }
+  // AMRAP3: abre vídeo na modal
+  abrirVideoModal(exs[i].yt, exs[i].nome);
+}
+
+function formatarRepsCompleto(ex){
+  // Formata o reps incluindo tempo de trabalho/descanso quando aplicável
+  let instrucao = ex.reps || '';
+  if(fase==='cond' && T[ta].td > 0 && T[ta].ts > 0){
+    const sufix = T[ta].ts + 's atividade · ' + T[ta].td + 's descanso';
+    if(/segundos?|minutos?/i.test(instrucao)){
+      instrucao = sufix;
+    } else {
+      instrucao = instrucao ? (instrucao + ' · ' + sufix) : sufix;
+    }
+  }
+  return instrucao;
+}
+
+function renderCarouselExs(){
+  const exs = getExs();
+  const carousel = document.getElementById('ex-carousel');
+  const dots = document.getElementById('ex-carousel-dots');
+  const totalLabel = (fase==='aq') ? 'AQ' : '';
+  carousel.innerHTML = exs.map((e, i) => `
+    <div class="ex-carousel-card" data-idx="${i}">
+      <div class="ex-carousel-card-header">
+        <span class="ex-carousel-card-tag" data-tag-idx="${i}">${totalLabel?totalLabel+' ':''}${i+1} / ${exs.length}</span>
+        <span class="ex-carousel-card-nome">${e.nome}</span>
+      </div>
+      <div class="ex-carousel-card-reps">${formatarRepsCompleto(e)}</div>
+      <div class="video-wrap">
+        <div class="video-placeholder" id="ex-carousel-placeholder-${i}" onclick="abrirVideoCarouselIdx(${i})">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <p>Ver exercício</p>
+        </div>
+        <iframe id="ex-carousel-frame-${i}" class="hidden" allow="autoplay;encrypted-media" allowfullscreen></iframe>
+      </div>
+    </div>
+  `).join('');
+  dots.innerHTML = exs.map((_, i) => `<div class="ex-carousel-dot${i===0?' active':''}" data-idx="${i}"></div>`).join('');
+  // Atualizar dot ao rolar
+  carousel.onscroll = () => {
+    const cardW = carousel.offsetWidth;
+    const idx = Math.round(carousel.scrollLeft / cardW);
+    dots.querySelectorAll('.ex-carousel-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+    });
+  };
+}
+
+function scrollCarouselToIdx(idx, marcarAtual){
+  const carousel = document.getElementById('ex-carousel');
+  const cards = carousel.querySelectorAll('.ex-carousel-card');
+  if(!cards[idx]) return;
+  const cardW = carousel.offsetWidth;
+  carousel.scrollTo({left: cardW * idx, behavior: 'smooth'});
+  // Marca ATUAL só se solicitado (sistema avançando)
+  if(marcarAtual){
+    cards.forEach((c, i) => {
+      c.classList.toggle('current', i === idx);
+      c.classList.toggle('dimmed', i !== idx);
+      const tag = c.querySelector('.ex-carousel-card-tag');
+      if(tag){
+        tag.classList.toggle('atual', i === idx);
+        const prefix = (fase==='aq') ? 'AQ ' : '';
+        tag.textContent = (i === idx ? 'ATUAL · ' : '') + prefix + (i+1) + ' / ' + cards.length;
+      }
+    });
+  }
+  // Sempre atualiza dots
+  document.querySelectorAll('#ex-carousel-dots .ex-carousel-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === idx);
+  });
+}
+
+function abrirVideoCarouselIdx(idx){
+  // Se AMRAP3 está ativo, usar exercícios do bloco atual; senão, exercícios padrão
+  const exs = (T[ta] && T[ta].fmt === 'AMRAP3' && fase === 'cond' && window.__amrap3BlocoAtual)
+    ? window.__amrap3BlocoAtual : getExs();
+  const ex = exs[idx];
+  if(!ex || !ex.yt) return;
+  const ytId = ex.yt.includes('shorts/') ? ex.yt.split('shorts/')[1] : ex.yt.includes('youtu.be/') ? ex.yt.split('youtu.be/')[1] : ex.yt;
+  const f = document.getElementById('ex-carousel-frame-'+idx);
+  const p = document.getElementById('ex-carousel-placeholder-'+idx);
+  f.src = 'https://www.youtube.com/embed/'+ytId+'?autoplay=1&rel=0';
+  f.classList.remove('hidden');
+  p.classList.add('hidden');
+}
+
+function abrirVideoModal(yt, nome){
+  if(!yt){ return; }
+  document.getElementById('video-modal-title').textContent = nome || '';
+  document.getElementById('video-modal-frame').src = 'https://www.youtube.com/embed/' + yt + '?autoplay=1&rel=0';
+  document.getElementById('video-modal').classList.add('show');
+}
+
+function fecharVideoModal(){
+  document.getElementById('video-modal-frame').src = '';
+  document.getElementById('video-modal').classList.remove('show');
+}
+
+// Manter AudioContext ativo — retoma se suspenso a cada interação
+document.addEventListener('touchstart', function() {
+  if(ac && ac.state==='suspended') ac.resume();
+});
+document.addEventListener('click', function() {
+  if(ac && ac.state==='suspended') ac.resume();
+});
+
+renderInicio();
+</script>
+</body>
+</html>
