@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIPOFIT · Semana 8 · TREINO 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g1:#9C34C7;--g2:#843B1B;
+  --card:rgba(255,255,255,0.08);
+  --card2:rgba(255,255,255,0.12);
+  --borda:rgba(255,255,255,0.15);
+  --txt:#ffffff;
+  --txt2:rgba(255,255,255,0.78);
+  --txt3:rgba(255,255,255,0.55);
+  --accent:rgba(255,255,255,0.9);
+  --warn:#ffd166;
+}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1) 0%,var(--g2) 100%) fixed;color:var(--txt);min-height:100vh;padding-bottom:40px}
+
+.header{width:100%;padding:32px 20px 20px;text-align:center;border-bottom:1px solid var(--borda);background:rgba(0,0,0,0.15);margin-bottom:0;position:relative}
+.header-brand{font-size:1.8rem;font-weight:700;letter-spacing:6px;color:var(--txt);margin-bottom:6px}
+.header-prog{font-size:.65rem;letter-spacing:3px;font-weight:600;color:var(--txt3);text-transform:uppercase;margin-bottom:14px}
+.header-week{display:inline-block;padding:6px 18px;background:rgba(255,255,255,0.12);border-radius:20px;border:1px solid var(--borda);font-size:.75rem;font-weight:600;letter-spacing:2px;color:var(--txt2);text-transform:uppercase}
+
+.btn-voltar{position:absolute;top:20px;left:16px;background:rgba(255,255,255,0.08);border:1px solid var(--borda);color:var(--txt);padding:8px 14px;border-radius:8px;font-size:.75rem;font-weight:500;cursor:pointer;font-family:'Poppins',sans-serif;display:none;align-items:center;gap:6px}
+.btn-voltar:active{background:rgba(255,255,255,0.18)}
+.btn-voltar.visivel{display:flex}
+.btn-voltar svg{width:14px;height:14px;fill:currentColor}
+
+.nivel-section{width:100%;max-width:520px;padding:22px 20px 8px;margin:0 auto}
+.slabel{font-size:.6rem;color:var(--txt3);letter-spacing:3px;font-weight:600;display:block;margin-bottom:10px;text-transform:uppercase}
+.nivel-bar{display:flex;gap:8px}
+.nivel-btn{flex:1;padding:12px 6px;border:1.5px solid var(--borda);border-radius:8px;background:transparent;color:var(--txt2);font-size:.72rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;text-transform:uppercase;letter-spacing:1px}
+.nivel-btn.active{background:rgba(255,255,255,0.22);color:var(--txt);border-color:rgba(255,255,255,0.4)}
+
+.intermediaria{width:100%;max-width:520px;margin:0 auto;padding:24px 20px}
+.treino-titulo{font-size:1.4rem;font-weight:700;color:var(--txt);line-height:1.3;text-align:center;margin-bottom:6px}
+.treino-subtitulo{font-size:.95rem;color:var(--txt2);text-align:center;margin-bottom:20px}
+.resumo-grid{background:var(--card);border-radius:14px;border:1px solid var(--borda);padding:16px;margin-bottom:20px}
+.resumo-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.08)}
+.resumo-item:last-child{border-bottom:none}
+.resumo-item .label{font-size:.72rem;color:var(--txt3);font-weight:500;text-transform:uppercase;letter-spacing:1px}
+.resumo-item .valor{font-size:.85rem;color:var(--txt);font-weight:600;text-align:right}
+.btn-comecar{width:100%;padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:var(--txt);font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:1.5px;text-transform:uppercase;transition:all .15s}
+.btn-comecar:active{transform:scale(.98)}
+
+#tela-treino{display:none}
+.treino-body{max-width:520px;margin:0 auto;padding:0 16px}
+.bloco{margin-top:24px}
+.bloco-header{margin-bottom:12px;padding:0 4px}
+.bloco-titulo{font-size:1.15rem;font-weight:700;color:var(--txt);line-height:1.3;letter-spacing:2px;text-transform:uppercase}
+
+.bloco-instrucao{background:var(--card);border:1px solid var(--borda);border-radius:12px;padding:14px 16px;margin-bottom:12px;font-size:.85rem;color:var(--txt2);line-height:1.6}
+.bloco-instrucao strong{color:var(--txt);font-weight:600}
+.bloco-instrucao p{margin:6px 0}
+.bloco-instrucao p:first-child{margin-top:0}
+.bloco-instrucao p:last-child{margin-bottom:0}
+.bloco-instrucao .duracao-destaque{font-size:1.1rem;font-weight:700;color:var(--txt);margin-bottom:8px}
+
+.rpe-explicacao{background:rgba(255,255,255,0.08);border:1px solid var(--borda);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.rpe-titulo{font-size:.9rem;font-weight:700;color:var(--txt);margin-bottom:8px}
+.rpe-texto{font-size:.8rem;color:var(--txt2);line-height:1.6;margin-bottom:8px}
+.rpe-escala{list-style:none;padding:0;margin:8px 0 0 0}
+.rpe-escala li{padding:4px 0;font-size:.8rem;color:var(--txt2);display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.rpe-escala li strong{color:var(--txt);font-weight:600;flex-shrink:0}
+
+.f1-mensagem{background:rgba(255,255,255,0.08);border:1px solid var(--borda);border-left:3px solid rgba(245,234,255,0.4);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:.82rem;color:var(--txt2);line-height:1.5;font-style:italic}
+.f1-mensagem strong{color:var(--txt);font-weight:600;font-style:normal}
+
+.ex-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;overflow:hidden;margin-bottom:12px}
+.ex-header{padding:14px 16px 10px}
+.ex-nome{font-size:1rem;font-weight:700;color:var(--txt);line-height:1.3}
+
+.ex-instrucao-inline{background:rgba(255,255,255,0.05);border-left:2px solid rgba(255,255,255,0.25);padding:8px 12px;margin-top:8px;margin-bottom:4px;font-size:.8rem;color:var(--txt2);line-height:1.55;border-radius:0 6px 6px 0}
+.ex-instrucao-inline strong{color:var(--txt);font-weight:600}
+.ex-instrucao-lista{list-style:none;padding:0;margin:0}
+.ex-instrucao-lista li{padding:3px 0;padding-left:14px;position:relative}
+.ex-instrucao-lista li:before{content:"•";position:absolute;left:2px;color:var(--txt3);font-weight:700}
+
+.ex-material-aba{font-size:.78rem;color:var(--txt2);margin:6px 0;line-height:1.5}
+.ex-material-aba strong{color:var(--txt);font-weight:600}
+
+.nivel-tabs{display:flex;gap:6px;padding:0 16px 12px}
+.nivel-tab{flex:1;padding:7px 4px;border:1px solid var(--borda);border-radius:6px;background:transparent;color:var(--txt3);font-size:.65rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:.5px}
+.nivel-tab.active{background:rgba(255,255,255,0.18);color:var(--txt);border-color:rgba(255,255,255,0.35)}
+.nivel-content{display:none;padding:0 16px 14px}
+.nivel-content.active{display:block}
+
+.video-wrap{position:relative;width:100%;padding-bottom:56.25%;background:rgba(0,0,0,0.4);margin:8px 0}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.video-placeholder{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:10px;background:rgba(0,0,0,0.45)}
+.play-circle{width:54px;height:54px;border:1.5px solid rgba(255,255,255,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08)}
+.play-circle svg{width:18px;height:18px;fill:#fff;margin-left:3px}
+.video-placeholder p{font-size:.65rem;color:rgba(255,255,255,.7);font-weight:500;letter-spacing:2px;text-transform:uppercase}
+
+.video-pendente{background:rgba(255,184,77,0.08);border:1px dashed rgba(255,184,77,0.3);border-radius:8px;padding:14px;margin:8px 0;text-align:center;font-size:.75rem;color:rgba(255,184,77,0.85)}
+
+.extras{margin-top:10px;padding:10px 12px;background:rgba(255,255,255,0.05);border-radius:8px;border-left:2px solid rgba(255,255,255,0.25)}
+.extras-titulo{font-size:.62rem;color:var(--txt3);text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:6px}
+.extras-item{font-size:.74rem;color:var(--txt2);margin:4px 0}
+.extras-item a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.3)}
+
+.plano-b{background:rgba(144,238,144,0.08);border:1px solid rgba(144,238,144,0.25);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.8rem;color:var(--txt2);line-height:1.55}
+.plano-b-titulo{font-size:.78rem;color:#a8e6a8;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+
+.crono-card{background:rgba(0,0,0,0.25);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-top:14px}
+.btn-iniciar-crono{width:100%;padding:13px;border-radius:10px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.18);color:var(--txt);font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:1.5px;text-transform:uppercase;transition:all .15s}
+.btn-iniciar-crono:active{transform:scale(.98);background:rgba(255,255,255,0.28)}
+.crono-display{display:none;text-align:center;padding:14px 0}
+.crono-display.ativo{display:block}
+.crono-fase{font-size:.7rem;letter-spacing:3px;font-weight:700;text-transform:uppercase;margin-bottom:8px;padding:4px 14px;display:inline-block;border-radius:6px}
+.crono-fase.forte{background:rgba(255,107,107,0.25);color:#ff9b9b;border:1px solid rgba(255,107,107,0.5)}
+.crono-fase.leve{background:rgba(144,238,144,0.18);color:#a8e6a8;border:1px solid rgba(144,238,144,0.4)}
+.crono-tempo{font-size:3.2rem;font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums;line-height:1.05;letter-spacing:2px}
+.crono-fase-tempo{font-size:.7rem;color:var(--txt3);margin-top:6px;text-transform:uppercase;letter-spacing:2px;font-weight:500}
+.crono-ex-nome{font-size:.95rem;color:var(--txt);margin:6px 0 10px;font-weight:600}
+.crono-contagem{font-size:5rem;font-weight:800;color:var(--txt);text-align:center;font-variant-numeric:tabular-nums;line-height:1;padding:10px 0;animation:pulseContagem .9s ease-out}
+@keyframes pulseContagem{0%{transform:scale(.6);opacity:0}50%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
+.crono-controles{display:none;gap:8px;margin-top:14px}
+.crono-controles.ativo{display:flex}
+.crono-btn{flex:1;padding:10px;border-radius:8px;border:1px solid var(--borda);background:rgba(255,255,255,0.08);color:var(--txt);font-size:.78rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:1px}
+.crono-btn:active{background:rgba(255,255,255,0.18)}
+
+#tela-final{display:none;text-align:center;padding:60px 20px 40px;max-width:480px;margin:0 auto}
+.final-icon{width:78px;height:78px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.final-icon svg{width:36px;height:36px;fill:#fff}
+#tela-final h2{font-size:1.5rem;color:var(--txt);font-weight:700;margin-bottom:14px}
+#tela-final p{color:var(--txt2);font-size:.92rem;line-height:1.7;max-width:320px;margin:0 auto 20px}
+
+
+.lipofit-logo-wrap{width:100%;max-width:450px;display:block;margin:0 auto 0;color:var(--txt)}
+.lipofit-logo-wrap svg{width:100%;height:auto;display:block}
+.lipofit-tagline{font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:500;letter-spacing:9px;color:rgba(255,255,255,0.92);text-transform:uppercase;margin-top:-22px;margin-bottom:14px}
+.lipofit-subinfo{font-size:.78rem;letter-spacing:3px;font-weight:600;color:var(--txt3);text-transform:uppercase;margin-bottom:14px}
+.treino-titulo{font-size:1.15rem !important}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button id="btnVoltar" class="btn-voltar visivel" onclick="voltarTela()">
+    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    <span>Voltar</span>
+  </button>
+  <div class="lipofit-logo-wrap">
+    <svg viewBox="0 0 800 280" role="img" aria-label="Lipofit">
+      <title>Lipofit</title>
+      <g fill="currentColor">
+        <text class="lf-lip" y="180" text-anchor="end" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">LIP</text>
+        <text class="lf-fit" y="180" text-anchor="start" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">FIT</text>
+        <g class="lf-sym">
+          <circle cx="225" cy="225" r="180" fill="none" stroke="currentColor" stroke-width="6"/>
+          <line x1="225" y1="45" x2="225" y2="97.36" stroke="currentColor" stroke-width="6"/>
+          <line x1="362" y1="118" x2="333.5" y2="146.98" stroke="currentColor" stroke-width="6"/>
+          <circle cx="225" cy="225" r="127.64" fill="none" stroke="currentColor" stroke-width="28"/>
+          <path d="M 188.24 319.58 C 197.68 323.88 208.19 326.06 219 326.06 C 219.45 326.06 219.91 325.98 220.36 325.98 C 220.96 326 221.57 326.07 222.18 326.07 C 224.5 326.07 226.84 325.8 229.19 325.41 C 232.7 324.98 236.21 324.32 239.71 323.43 L 252.78 320.08 C 271.01 315.41 286.24 303.86 294.59 288.38 C 320.2 240.85 276.41 185.73 274.54 183.41 C 273.69 182.36 272.25 182 271.01 182.51 C 269.76 183.02 269 184.29 269.13 185.64 C 270.46 198.84 269.9 208.26 268.46 214.99 C 270.79 200.11 263.79 188.49 258.14 181.8 C 255.7 178.91 252.58 176.23 248.32 173.37 C 215.14 151.04 227.21 120.74 227.75 119.46 C 228.28 118.18 227.88 116.69 226.76 115.85 C 225.65 115.02 224.12 115.03 223.03 115.9 C 212.36 124.39 207.95 139.46 206.13 150.61 C 204.91 158.09 205.2 166.3 206.99 175 C 210.09 190.04 207.39 202.39 203.04 211.8 C 204.17 190.09 191.48 166.29 190.7 164.84 C 190.03 163.61 188.61 163 187.27 163.33 C 185.91 163.68 184.96 164.89 184.96 166.29 L 184.96 166.92 C 184.96 180.03 179.96 192.46 170.86 201.92 C 153.27 220.2 145.18 245.18 149.22 268.76 C 153.18 291.86 167.05 309.91 188.26 319.59 Z M 204.22 281.27 C 205.22 282.61 207.12 282.91 208.47 281.91 C 209.23 281.36 209.91 280.76 210.53 280.14 C 214.86 276.05 224.13 265.02 220.64 248.09 C 219.84 244.23 219.71 240.78 220.24 237.55 C 220.46 236.21 220.77 234.74 221.18 233.25 C 222.23 239.22 225.61 246.16 234.27 251.99 C 236.04 253.18 237.3 254.25 238.24 255.36 C 242.17 260.01 245.39 267.56 238.41 277.12 C 237.73 278.06 237.63 279.3 238.17 280.33 C 238.71 281.36 239.64 281.96 240.94 281.97 C 241.3 281.97 244.51 281.8 247.42 278.51 C 250.08 275.51 251.62 270.95 252.05 264.89 C 257.29 274.39 263.22 290 255.93 303.54 C 252.36 310.16 245.8 315.11 237.92 317.13 L 231.39 318.8 C 230.36 319.06 229.34 319.16 228.31 319.32 C 226.13 319.59 223.96 319.78 221.8 319.86 C 217.18 319.81 212.69 318.97 208.68 317.14 C 199.5 312.94 193.5 305.12 191.78 295.11 C 190 284.75 193.59 273.73 201.38 265.64 C 204.22 262.68 206.38 259.24 207.8 255.45 C 209.91 262.23 211.18 271.04 205.99 276.04 C 205.36 276.61 204.93 276.93 204.84 277 C 203.49 278 203.2 279.91 204.21 281.26 Z M 175.23 206.14 C 182.82 198.25 187.87 188.51 189.96 177.99 C 195.64 192.23 202.86 217.79 188.69 231.32 C 187.3 232.57 186.38 233.28 186.18 233.43 C 184.83 234.43 184.54 236.34 185.54 237.69 C 186.54 239.05 188.45 239.33 189.8 238.34 C 191.59 237.02 193.17 235.59 194.55 234.07 C 203.03 225.55 219.29 204.58 212.96 173.77 C 211.31 165.79 211.05 158.33 212.14 151.59 C 213.25 144.79 215.37 136.43 219.42 129.47 C 218.3 142.23 221.17 162.46 244.89 178.43 C 248.68 180.97 251.4 183.29 253.46 185.73 C 260.48 194.03 269.87 211.2 253.94 233.03 C 253.26 233.97 253.16 235.21 253.7 236.24 C 254.25 237.27 255.25 237.9 256.47 237.88 C 257.05 237.87 262.26 237.59 267.23 231.99 C 273.5 224.89 276.42 212.82 275.93 196.01 C 286.93 213.1 307.19 252.12 289.21 285.48 C 282.58 297.79 271.07 307.34 257.11 312.36 C 258.72 310.54 260.16 308.57 261.31 306.43 C 274.59 281.78 252.09 253.46 251.12 252.26 C 250.27 251.21 248.83 250.87 247.59 251.36 C 246.34 251.88 245.58 253.15 245.71 254.5 C 245.75 254.9 245.79 255.3 245.82 255.69 C 244.84 253.89 243.76 252.45 242.9 251.43 C 241.59 249.88 239.93 248.45 237.68 246.94 C 222.19 236.51 227.71 222.43 227.95 221.84 C 228.49 220.56 228.09 219.07 226.98 218.23 C 225.87 217.39 224.34 217.41 223.24 218.28 C 217.52 222.82 215.19 230.73 214.23 236.58 C 213.59 240.5 213.74 244.79 214.68 249.33 C 215.42 252.96 215.46 256.27 215.04 259.22 C 213.45 250.88 209.67 243.77 209.36 243.21 C 208.69 241.98 207.29 241.52 205.93 241.86 C 204.57 242.21 203.63 243.58 203.63 244.98 C 203.63 251.14 201.27 256.97 197 261.41 C 187.87 270.9 183.67 283.89 185.77 296.15 C 187.16 304.25 190.93 311.12 196.59 316.32 C 194.61 315.64 192.67 314.89 190.79 314.03 C 171.46 305.21 158.83 288.76 175.24 206.14 Z M 175.23 206.14"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+  <div class="lipofit-tagline">DESPERTAR</div>
+  <div class="lipofit-subinfo">Trimestre 1 · Adaptação</div>
+  <div class="header-week">Semana 8 · TREINO 4</div>
+</div>
+
+<div id="tela-intermediaria">
+  <div class="nivel-section">
+    <span class="slabel">Selecione seu nível</span>
+    <div class="nivel-bar">
+      <button class="nivel-btn" data-n="iniciante" onclick="selecionarNivel('iniciante')">Iniciante</button>
+      <button class="nivel-btn" data-n="intermediaria" onclick="selecionarNivel('intermediaria')">Intermediária</button>
+      <button class="nivel-btn" data-n="avancada" onclick="selecionarNivel('avancada')">Avançada</button>
+    </div>
+  </div>
+
+  <div class="intermediaria">
+    <div class="treino-titulo">COSTAS E BÍCEPS</div>
+
+    <div class="resumo-grid">
+      <div class="resumo-item"><span class="label">Duração</span><span class="valor">50-60 min</span></div>
+      <div class="resumo-item"><span class="label">Fase</span><span class="valor">Intensificando - mais densidade</span></div>
+      <div class="resumo-item"><span class="label">Aquecimento</span><span class="valor">5 min · cardio leve</span></div>
+      <div class="resumo-item"><span class="label">Força 1</span><span class="valor">4×12 · 60s descanso</span></div>
+      <div class="resumo-item"><span class="label">Força 2</span><span class="valor">3 exercícios · 3×12</span></div>
+      <div class="resumo-item"><span class="label">Cardio</span><span class="valor">30 min · ritmo constante</span></div>
+      <div class="resumo-item"><span class="label">Core</span><span class="valor">2 ex · circuito 40s/20s</span></div>
+    </div>
+
+    <button class="btn-comecar" onclick="comecarTreino()">Começar Treino</button>
+  </div>
+</div>
+
+<div id="tela-treino">
+  <div class="treino-body">
+<div class="bloco"><div class="bloco-header"><div class="bloco-titulo">Aquecimento</div></div><div class="bloco-instrucao"><p class="duracao-destaque">5 minutos</p><p>Escolha o cardio da sua preferência: <strong>caminhada rápida na esteira, bicicleta, elíptico ou pulos de corda</strong>.</p><p>O aquecimento pode ser feito com intensidade leve a moderada.</p><p><em>Caso você esteja com pouco tempo, reduza o tempo de cardio do aquecimento para 3 minutos.</em></p></div></div><div class="bloco"><div class="bloco-header"><div class="bloco-titulo">Força 1</div></div><div class="rpe-explicacao"><div class="rpe-titulo">Como usar a escala de Dificuldade</div><div class="rpe-texto">A <strong>Dificuldade</strong> é uma escala de 0 a 10 que te ajuda a escolher o peso certo. Use a sua sensação como guia:</div><ul class="rpe-escala"><li><strong>5 a 6:</strong> esforço leve, conseguiria fazer várias repetições a mais</li><li><strong>6 a 7:</strong> moderado, mais 4-5 repetições possíveis</li><li><strong>7 a 8:</strong> difícil, no máximo 1-2 repetições a mais</li><li><strong>8 a 9:</strong> quase no limite, última repetição no esforço máximo</li></ul></div><div class="ex-card"><div class="ex-header"><div class="ex-nome">Pulldown (Puxada na Polia Alta)</div><div class="ex-instrucao-inline"><ul class="ex-instrucao-lista"><li><strong>4 séries de 12 repetições</strong></li><li>Descanse <strong>60 segundos</strong> entre séries</li><li>Dificuldade alvo iniciantes: 6-7</li><li>Dificuldade alvo intermediária e avançada: 7-8</li></ul></div></div><div class="nivel-tabs"><button class="nivel-tab" data-n="iniciante" onclick="selecionarNivelCard(this.closest('.ex-card'), 'iniciante')">Iniciante</button><button class="nivel-tab" data-n="intermediaria" onclick="selecionarNivelCard(this.closest('.ex-card'), 'intermediaria')">Intermediária</button><button class="nivel-tab" data-n="avancada" onclick="selecionarNivelCard(this.closest('.ex-card'), 'avancada')">Avançada</button></div><div class="nivel-content" data-n="iniciante"><div class="ex-material-aba"><strong>Material:</strong> Polia alta com barra</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, '95eFnbahWYw')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="intermediaria"><div class="ex-material-aba"><strong>Material:</strong> Polia alta com barra</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, '95eFnbahWYw')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="avancada"><div class="ex-material-aba"><strong>Material:</strong> Polia alta com barra</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, '95eFnbahWYw')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div></div></div><div class="bloco"><div class="bloco-header"><div class="bloco-titulo">Força 2</div></div><div class="ex-card"><div class="ex-header"><div class="ex-nome">Remada Sentada</div><div class="ex-instrucao-inline"><ul class="ex-instrucao-lista"><li><strong>3 séries de 12 repetições</strong></li><li>Descanse <strong>45 segundos</strong> entre séries</li><li>Dificuldade alvo iniciantes: 5-6</li><li>Dificuldade alvo intermediária e avançada: 6-7</li></ul></div></div><div class="nivel-tabs"><button class="nivel-tab" data-n="iniciante" onclick="selecionarNivelCard(this.closest('.ex-card'), 'iniciante')">Iniciante</button><button class="nivel-tab" data-n="intermediaria" onclick="selecionarNivelCard(this.closest('.ex-card'), 'intermediaria')">Intermediária</button><button class="nivel-tab" data-n="avancada" onclick="selecionarNivelCard(this.closest('.ex-card'), 'avancada')">Avançada</button></div><div class="nivel-content" data-n="iniciante"><div class="ex-material-aba"><strong>Material:</strong> Máquina de remada sentada ou polia baixa</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'LZKwO5bMl6Y')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="intermediaria"><div class="ex-material-aba"><strong>Material:</strong> Máquina de remada sentada ou polia baixa</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'LZKwO5bMl6Y')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="avancada"><div class="ex-material-aba"><strong>Material:</strong> Máquina de remada sentada ou polia baixa</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'LZKwO5bMl6Y')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div></div><div class="ex-card"><div class="ex-header"><div class="ex-nome">Remada Curvada com Halteres</div><div class="ex-instrucao-inline"><ul class="ex-instrucao-lista"><li><strong>3 séries de 12 repetições</strong></li><li>Descanse <strong>45 segundos</strong> entre séries</li><li>Dificuldade alvo iniciantes: 5-6</li><li>Dificuldade alvo intermediária e avançada: 6-7</li></ul></div></div><div class="nivel-tabs"><button class="nivel-tab" data-n="iniciante" onclick="selecionarNivelCard(this.closest('.ex-card'), 'iniciante')">Iniciante</button><button class="nivel-tab" data-n="intermediaria" onclick="selecionarNivelCard(this.closest('.ex-card'), 'intermediaria')">Intermediária</button><button class="nivel-tab" data-n="avancada" onclick="selecionarNivelCard(this.closest('.ex-card'), 'avancada')">Avançada</button></div><div class="nivel-content" data-n="iniciante"><div class="ex-material-aba"><strong>Material:</strong> 1 par de halteres</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'U6zGmjo8Pe4')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="intermediaria"><div class="ex-material-aba"><strong>Material:</strong> 1 par de halteres</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'U6zGmjo8Pe4')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="avancada"><div class="ex-material-aba"><strong>Material:</strong> 1 par de halteres</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'U6zGmjo8Pe4')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div></div><div class="ex-card"><div class="ex-header"><div class="ex-nome">Rosca Alternada</div><div class="ex-instrucao-inline"><ul class="ex-instrucao-lista"><li><strong>3 séries de 12 repetições para cada lado</strong></li><li>Descanse <strong>45 segundos</strong> entre séries</li><li>Dificuldade alvo iniciantes: 5-6</li><li>Dificuldade alvo intermediária e avançada: 6-7</li></ul></div></div><div class="nivel-tabs"><button class="nivel-tab" data-n="iniciante" onclick="selecionarNivelCard(this.closest('.ex-card'), 'iniciante')">Iniciante</button><button class="nivel-tab" data-n="intermediaria" onclick="selecionarNivelCard(this.closest('.ex-card'), 'intermediaria')">Intermediária</button><button class="nivel-tab" data-n="avancada" onclick="selecionarNivelCard(this.closest('.ex-card'), 'avancada')">Avançada</button></div><div class="nivel-content" data-n="iniciante"><div class="ex-material-aba"><strong>Material:</strong> 1 par de halteres</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'DgZt9JhW56M')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="intermediaria"><div class="ex-material-aba"><strong>Material:</strong> 1 par de halteres</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'DgZt9JhW56M')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="avancada"><div class="ex-material-aba"><strong>Material:</strong> 1 par de halteres</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'DgZt9JhW56M')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div></div></div><div class="bloco"><div class="bloco-header"><div class="bloco-titulo">Cardio</div></div><div class="bloco-instrucao"><p class="duracao-destaque">30 minutos</p><p>Caminhada na esteira com inclinação. Mantenha um ritmo confortável mas que te faça suar. Ótimo para recuperar do treino de costas.</p><p style="margin-top:10px"><strong>Use a escala da fala como guia:</strong></p><p style="margin-left:8px">• Ritmo que <strong>consegue conversar</strong> = leve</p><p style="margin-left:8px">• Ritmo que <strong>consegue falar pouco</strong> = moderado</p><p style="margin-left:8px">• Ritmo que <strong>não consegue falar</strong> = forte</p><p style="margin-top:10px"><em>Caso esteja com pouco tempo, você pode diminuir a duração ou as rodadas do cardio.</em></p></div></div><div class="bloco"><div class="bloco-header"><div class="bloco-titulo">Core</div></div><div class="rpe-explicacao"><div class="rpe-titulo">Como funciona o circuito do Core</div><div class="rpe-texto"><ul style="margin-left:18px;line-height:1.85;margin-top:4px"><li><strong>Exercício 1:</strong> máximo de repetições em 40 segundos</li><li>Descanse 20 segundos e siga para o Exercício 2</li><li><strong>Exercício 2:</strong> máximo de repetições em 40 segundos</li><li>Descanse 20 segundos e volte para o Exercício 1</li><li><strong>Repita 3 vezes</strong> esse circuito</li></ul></div><div class="rpe-texto" style="margin-top:8px"><em>Use o cronômetro abaixo — ele guia você nas trocas com bipes.</em></div></div><div class="ex-card"><div class="ex-header"><div class="ex-nome">Abdominal Russian Twist</div><div class="ex-instrucao-inline"><ul class="ex-instrucao-lista"><li><strong>40 segundos</strong> de exercício, <strong>20 segundos</strong> de descanso</li><li>Segue para o Exercício 2</li></ul></div></div><div class="nivel-tabs"><button class="nivel-tab" data-n="iniciante" onclick="selecionarNivelCard(this.closest('.ex-card'), 'iniciante')">Iniciante</button><button class="nivel-tab" data-n="intermediaria" onclick="selecionarNivelCard(this.closest('.ex-card'), 'intermediaria')">Intermediária</button><button class="nivel-tab" data-n="avancada" onclick="selecionarNivelCard(this.closest('.ex-card'), 'avancada')">Avançada</button></div><div class="nivel-content" data-n="iniciante"><div style="font-size:.82rem;font-weight:500;color:var(--txt2);margin-bottom:6px;font-style:italic">Abdominal Russian Twist (sem peso, pés no chão)</div><div class="ex-material-aba"><strong>Material:</strong> colchonete</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, 'eAz20s6bGHE')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="intermediaria"><div style="font-size:.82rem;font-weight:500;color:var(--txt2);margin-bottom:6px;font-style:italic">Abdominal Russian Twist com Peso</div><div class="ex-material-aba"><strong>Material:</strong> colchonete + 1 halter leve</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, '_e-YrN9nCZ4')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="avancada"><div style="font-size:.82rem;font-weight:500;color:var(--txt2);margin-bottom:6px;font-style:italic">Abdominal Russian Twist com Peso</div><div class="ex-material-aba"><strong>Material:</strong> colchonete + 1 halter</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, '_e-YrN9nCZ4')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div></div><div class="ex-card"><div class="ex-header"><div class="ex-nome">Prancha com Joelhos Alternados</div><div class="ex-instrucao-inline"><ul class="ex-instrucao-lista"><li><strong>40 segundos</strong> de exercício, <strong>20 segundos</strong> de descanso</li><li>Volta para o Exercício 1</li></ul></div></div><div class="nivel-tabs"><button class="nivel-tab" data-n="iniciante" onclick="selecionarNivelCard(this.closest('.ex-card'), 'iniciante')">Iniciante</button><button class="nivel-tab" data-n="intermediaria" onclick="selecionarNivelCard(this.closest('.ex-card'), 'intermediaria')">Intermediária</button><button class="nivel-tab" data-n="avancada" onclick="selecionarNivelCard(this.closest('.ex-card'), 'avancada')">Avançada</button></div><div class="nivel-content" data-n="iniciante"><div class="ex-material-aba"><strong>Material:</strong> colchonete</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, '2r8niMjcGGk')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="intermediaria"><div class="ex-material-aba"><strong>Material:</strong> colchonete</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, '2r8niMjcGGk')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div><div class="nivel-content" data-n="avancada"><div class="ex-material-aba"><strong>Material:</strong> colchonete</div>
+    <div class="video-wrap">
+      <div class="video-placeholder" onclick="tocarVideo(this, '2r8niMjcGGk')">
+        <div class="play-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <p>Toque para ver</p>
+      </div>
+    </div></div></div>
+    <div class="crono-card" id="crono-core-t4">
+      <button class="btn-iniciar-crono" onclick="iniciarCronometroCore('core-t4', '%5B%22Abdominal%20Russian%20Twist%22%2C%20%22Prancha%20com%20Joelhos%20Alternados%22%5D', 40, 20)">Iniciar Cronômetro do Circuito · 2 exercícios × 3 voltas</button>
+      <div class="crono-display"></div>
+      <div class="crono-controles">
+        <button class="crono-btn btn-pausar" onclick="pausarCronometroCore('core-t4')">Pausar</button>
+        <button class="crono-btn" onclick="pararCronometroCore('core-t4', false)">Resetar</button>
+      </div>
+    </div></div>
+    <div style="margin-top:32px;margin-bottom:8px">
+      <button class="btn-comecar" onclick="finalizarTreino()">Finalizar Treino</button>
+    </div>
+  </div>
+</div>
+
+<div id="tela-final">
+  <div class="final-icon">
+    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+  </div>
+  <h2>Parabéns!</h2>
+  <p>Mais um treino feito. Cada série conta na sua jornada de transformação ao longo do ano.</p>
+  <p style="font-weight:600;color:var(--txt)">Bora meter esse shape, minha querida!</p>
+</div>
+
+<script>
+function alinharLogoLipofit(){
+  document.querySelectorAll('.lipofit-logo-wrap svg').forEach(function(svg){
+    var lip = svg.querySelector('.lf-lip');
+    var fit = svg.querySelector('.lf-fit');
+    var sym = svg.querySelector('.lf-sym');
+    if(!lip || !fit || !sym) return;
+    try {
+      var NS = "http://www.w3.org/2000/svg";
+      var tmp = document.createElementNS(NS,'text');
+      tmp.setAttribute('font-family','Arial,sans-serif');
+      tmp.setAttribute('font-weight','400');
+      tmp.setAttribute('font-size','150');
+      tmp.setAttribute('visibility','hidden');
+      tmp.textContent = 'O';
+      svg.appendChild(tmp);
+      var oBox = tmp.getBBox();
+      svg.removeChild(tmp);
+      var wO = oBox.width;
+      var cy = 180 + oBox.y + oBox.height/2;
+      lip.setAttribute('x', (400 - wO/2).toFixed(2));
+      fit.setAttribute('x', (400 + wO/2).toFixed(2));
+      var scale = wO / 283.28;
+      sym.setAttribute('transform', 'translate(400 ' + cy.toFixed(2) + ') scale(' + scale.toFixed(3) + ') translate(-225 -225)');
+    } catch(e){}
+  });
+}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(alinharLogoLipofit, 50); });
+else setTimeout(alinharLogoLipofit, 200);
+setTimeout(alinharLogoLipofit, 1000);
+
+let nivelAtual = localStorage.getItem('lipofit_nivel') || 'intermediaria';
+
+function selecionarNivel(nivel) {
+  nivelAtual = nivel;
+  localStorage.setItem('lipofit_nivel', nivel);
+  document.querySelectorAll('.nivel-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.nivel-btn[data-n="${nivel}"]`).classList.add('active');
+  document.querySelectorAll('.ex-card').forEach(card => atualizaNivelCard(card));
+}
+
+function atualizaNivelCard(card) {
+  const tabs = card.querySelectorAll('.nivel-tab');
+  const contents = card.querySelectorAll('.nivel-content');
+  if (tabs.length === 0) return;
+  tabs.forEach(t => t.classList.remove('active'));
+  contents.forEach(c => c.classList.remove('active'));
+  const tab = card.querySelector(`.nivel-tab[data-n="${nivelAtual}"]`);
+  const content = card.querySelector(`.nivel-content[data-n="${nivelAtual}"]`);
+  if (tab) tab.classList.add('active');
+  if (content) content.classList.add('active');
+}
+
+function selecionarNivelCard(card, nivel) {
+  const tabs = card.querySelectorAll('.nivel-tab');
+  const contents = card.querySelectorAll('.nivel-content');
+  tabs.forEach(t => t.classList.remove('active'));
+  contents.forEach(c => c.classList.remove('active'));
+  card.querySelector(`.nivel-tab[data-n="${nivel}"]`).classList.add('active');
+  card.querySelector(`.nivel-content[data-n="${nivel}"]`).classList.add('active');
+}
+
+function tocarVideo(placeholder, ytId) {
+  const wrap = placeholder.parentElement;
+  const iframe = document.createElement('iframe');
+  iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+  iframe.allowFullscreen = true;
+  iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+  wrap.appendChild(iframe);
+  placeholder.remove();
+}
+
+function comecarTreino() {
+  document.getElementById('tela-intermediaria').classList.add('hidden');
+  document.getElementById('tela-treino').style.display = 'block';
+  document.getElementById('btnVoltar').classList.add('visivel');
+  window.scrollTo({top: 0, behavior: 'instant'});
+}
+
+function finalizarTreino() {
+  document.getElementById('tela-treino').style.display = 'none';
+  document.getElementById('tela-final').style.display = 'block';
+  document.getElementById('btnVoltar').classList.remove('visivel');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function voltarTela() {
+  const telaFinal = document.getElementById('tela-final');
+  if (telaFinal.style.display === 'block') {
+    telaFinal.style.display = 'none';
+    document.getElementById('tela-treino').style.display = 'block';
+    document.getElementById('btnVoltar').classList.add('visivel');
+    window.scrollTo({top: 0, behavior: 'instant'});
+    return;
+  }
+  const telaTreino = document.getElementById('tela-treino');
+  if (telaTreino.style.display === 'block') {
+    // Está na tela de treino → volta pra tela inicial do treino
+    telaTreino.style.display = 'none';
+    document.getElementById('tela-intermediaria').classList.remove('hidden');
+    window.scrollTo({top: 0, behavior: 'instant'});
+    return;
+  }
+  // Está na tela inicial do treino → volta pra página-índice da semana
+  history.back();
+}
+
+let audioCtx = null;
+function unlockAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    g.gain.setValueAtTime(0, audioCtx.currentTime);
+    o.start(audioCtx.currentTime); o.stop(audioCtx.currentTime + 0.001);
+  } else if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+function bip(freq, delay, dur, vol = 0.3) {
+  if (!audioCtx) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.frequency.value = freq;
+  o.type = 'sine';
+  g.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + dur);
+  o.start(audioCtx.currentTime + delay);
+  o.stop(audioCtx.currentTime + delay + dur + 0.05);
+}
+
+function bipFim() {
+  bip(784, 0, 0.1);
+  bip(784, 0.15, 0.1);
+  bip(784, 0.3, 0.1);
+  bip(1047, 0.5, 0.5, 0.35);
+}
+
+function bipTroca() { bip(660, 0, 0.12, 0.18); }
+function bipContagem() { bip(880, 0, 0.08, 0.15); }
+
+function contagemRegressiva(displayEl, callback) {
+  let n = 3;
+  displayEl.innerHTML = `<div class="crono-contagem">${n}</div>`;
+  bipContagem();
+  const interval = setInterval(() => {
+    n--;
+    if (n > 0) {
+      displayEl.innerHTML = `<div class="crono-contagem">${n}</div>`;
+      bipContagem();
+    } else {
+      clearInterval(interval);
+      callback();
+    }
+  }, 1000);
+}
+
+let cronoState = {
+  intervalo: null, tempoTotal: 0, modo: 'intervalado',
+  fase: 'forte', fasesSegundos: [], tempoFase: 0, pausado: false
+};
+
+function formatarTempo(seg) {
+  const m = Math.floor(seg / 60);
+  const s = seg % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function iniciarCronometro(blocoId, minutos, modo, segForte, segLeve) {
+  unlockAudio();
+  const card = document.getElementById('crono-' + blocoId);
+  if (!card) return;
+  pararCronometro(blocoId, false);
+  cronoState = {
+    intervalo: null, tempoTotal: minutos * 60, modo: modo, fase: 'forte',
+    fasesSegundos: [segForte, segLeve],
+    tempoFase: modo === 'intervalado' ? segForte : (minutos * 60),
+    pausado: false, blocoId: blocoId,
+  };
+  card.querySelector('.crono-display').classList.add('ativo');
+  card.querySelector('.crono-controles').classList.add('ativo');
+  card.querySelector('.btn-iniciar-crono').style.display = 'none';
+  const display = card.querySelector('.crono-display');
+  contagemRegressiva(display, () => {
+    atualizarDisplayCrono(blocoId);
+    cronoState.intervalo = setInterval(() => tickCronometro(blocoId), 1000);
+  });
+}
+
+function tickCronometro(blocoId) {
+  if (cronoState.pausado) return;
+  cronoState.tempoTotal--;
+  if (cronoState.modo === 'intervalado') {
+    cronoState.tempoFase--;
+    if (cronoState.tempoFase === 3 || cronoState.tempoFase === 2 || cronoState.tempoFase === 1) bipContagem();
+    if (cronoState.tempoFase <= 0) {
+      bipTroca();
+      cronoState.fase = (cronoState.fase === 'forte') ? 'leve' : 'forte';
+      cronoState.tempoFase = (cronoState.fase === 'forte') ? cronoState.fasesSegundos[0] : cronoState.fasesSegundos[1];
+    }
+  } else {
+    if (cronoState.tempoTotal === 3 || cronoState.tempoTotal === 2 || cronoState.tempoTotal === 1) bipContagem();
+  }
+  if (cronoState.tempoTotal <= 0) {
+    bipFim();
+    pararCronometro(blocoId, true);
+    return;
+  }
+  atualizarDisplayCrono(blocoId);
+}
+
+function atualizarDisplayCrono(blocoId) {
+  const card = document.getElementById('crono-' + blocoId);
+  if (!card) return;
+  const display = card.querySelector('.crono-display');
+  const tempoTexto = formatarTempo(cronoState.tempoTotal);
+  if (cronoState.modo === 'intervalado') {
+    const fase = cronoState.fase === 'forte' ? 'FORTE' : 'LEVE';
+    const cor = cronoState.fase === 'forte' ? 'forte' : 'leve';
+    display.innerHTML = `<div class="crono-fase ${cor}">${fase}</div><div class="crono-tempo">${tempoTexto}</div><div class="crono-fase-tempo">${cronoState.tempoFase}s nesta fase</div>`;
+  } else {
+    display.innerHTML = `<div class="crono-tempo">${tempoTexto}</div><div class="crono-fase-tempo">tempo restante</div>`;
+  }
+}
+
+function pausarCronometro(blocoId) {
+  cronoState.pausado = !cronoState.pausado;
+  const card = document.getElementById('crono-' + blocoId);
+  if (!card) return;
+  const btn = card.querySelector('.btn-pausar');
+  btn.textContent = cronoState.pausado ? 'Retomar' : 'Pausar';
+}
+
+function pararCronometro(blocoId, finalizado) {
+  if (cronoState.intervalo) {
+    clearInterval(cronoState.intervalo);
+    cronoState.intervalo = null;
+  }
+  const card = document.getElementById('crono-' + blocoId);
+  if (!card) return;
+  if (finalizado) {
+    card.querySelector('.crono-display').innerHTML = `<div class="crono-tempo" style="color:#90ee90">Cardio Concluido</div>`;
+    card.querySelector('.crono-controles').classList.remove('ativo');
+    card.querySelector('.btn-iniciar-crono').style.display = 'block';
+    card.querySelector('.btn-iniciar-crono').textContent = 'Iniciar Cronometro de Novo';
+  } else {
+    card.querySelector('.crono-display').classList.remove('ativo');
+    card.querySelector('.crono-display').innerHTML = '';
+    card.querySelector('.crono-controles').classList.remove('ativo');
+    card.querySelector('.btn-iniciar-crono').style.display = 'block';
+    const btnPausar = card.querySelector('.btn-pausar');
+    if (btnPausar) btnPausar.textContent = 'Pausar';
+    cronoState.pausado = false;
+  }
+}
+
+let coreState = {
+  intervalo: null, exercicios: [], serieAtual: 1, exIndex: 0,
+  fase: 'on', segOn: 40, segOff: 20, tempoFase: 0, pausado: false
+};
+
+function iniciarCronometroCore(blocoId, exerciciosJson, segOn, segOff) {
+  unlockAudio();
+  const card = document.getElementById('crono-' + blocoId);
+  if (!card) return;
+  pararCronometroCore(blocoId, false);
+  coreState = {
+    intervalo: null,
+    exercicios: JSON.parse(decodeURIComponent(exerciciosJson)),
+    serieAtual: 1, exIndex: 0, fase: 'on',
+    segOn: segOn, segOff: segOff, tempoFase: segOn,
+    pausado: false, blocoId: blocoId,
+  };
+  card.querySelector('.crono-display').classList.add('ativo');
+  card.querySelector('.crono-controles').classList.add('ativo');
+  card.querySelector('.btn-iniciar-crono').style.display = 'none';
+  const display = card.querySelector('.crono-display');
+  contagemRegressiva(display, () => {
+    atualizarDisplayCore(blocoId);
+    coreState.intervalo = setInterval(() => tickCore(blocoId), 1000);
+  });
+}
+
+function tickCore(blocoId) {
+  if (coreState.pausado) return;
+  coreState.tempoFase--;
+  if (coreState.tempoFase === 3 || coreState.tempoFase === 2 || coreState.tempoFase === 1) bipContagem();
+  if (coreState.tempoFase <= 0) {
+    bipTroca();
+    if (coreState.fase === 'on') {
+      const isUltimoEx = coreState.exIndex === coreState.exercicios.length - 1;
+      const isUltimaSerie = coreState.serieAtual === 3;
+      if (isUltimoEx && isUltimaSerie) {
+        bipFim();
+        pararCronometroCore(blocoId, true);
+        return;
+      }
+      coreState.fase = 'off';
+      coreState.tempoFase = coreState.segOff;
+    } else {
+      coreState.fase = 'on';
+      coreState.tempoFase = coreState.segOn;
+      coreState.exIndex++;
+      if (coreState.exIndex >= coreState.exercicios.length) {
+        coreState.exIndex = 0;
+        coreState.serieAtual++;
+      }
+    }
+  }
+  atualizarDisplayCore(blocoId);
+}
+
+function atualizarDisplayCore(blocoId) {
+  const card = document.getElementById('crono-' + blocoId);
+  if (!card) return;
+  const display = card.querySelector('.crono-display');
+  const tempoTexto = formatarTempo(coreState.tempoFase);
+  const exNome = coreState.exercicios[coreState.exIndex] || '';
+  if (coreState.fase === 'on') {
+    display.innerHTML = `<div class="crono-fase forte">EXERCICIO - VOLTA ${coreState.serieAtual}/3</div><div class="crono-ex-nome">${exNome}</div><div class="crono-tempo">${tempoTexto}</div>`;
+  } else {
+    let proximoEx = '';
+    if (coreState.exIndex < coreState.exercicios.length - 1) {
+      proximoEx = coreState.exercicios[coreState.exIndex + 1];
+    } else if (coreState.serieAtual < 3) {
+      proximoEx = coreState.exercicios[0];
+    }
+    display.innerHTML = `<div class="crono-fase leve">DESCANSO</div>${proximoEx ? `<div class="crono-ex-nome">Proximo: ${proximoEx}</div>` : ''}<div class="crono-tempo">${tempoTexto}</div>`;
+  }
+}
+
+function pausarCronometroCore(blocoId) {
+  coreState.pausado = !coreState.pausado;
+  const card = document.getElementById('crono-' + blocoId);
+  if (!card) return;
+  const btn = card.querySelector('.btn-pausar');
+  btn.textContent = coreState.pausado ? 'Retomar' : 'Pausar';
+}
+
+function pararCronometroCore(blocoId, finalizado) {
+  if (coreState.intervalo) {
+    clearInterval(coreState.intervalo);
+    coreState.intervalo = null;
+  }
+  const card = document.getElementById('crono-' + blocoId);
+  if (!card) return;
+  if (finalizado) {
+    card.querySelector('.crono-display').innerHTML = `<div class="crono-tempo" style="color:#90ee90">Core Concluido</div>`;
+    card.querySelector('.crono-controles').classList.remove('ativo');
+    card.querySelector('.btn-iniciar-crono').style.display = 'block';
+    card.querySelector('.btn-iniciar-crono').textContent = 'Iniciar Cronometro de Novo';
+  } else {
+    card.querySelector('.crono-display').classList.remove('ativo');
+    card.querySelector('.crono-display').innerHTML = '';
+    card.querySelector('.crono-controles').classList.remove('ativo');
+    card.querySelector('.btn-iniciar-crono').style.display = 'block';
+    const btnPausar = card.querySelector('.btn-pausar');
+    if (btnPausar) btnPausar.textContent = 'Pausar';
+    coreState.pausado = false;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  selecionarNivel(nivelAtual);
+});
+</script>
+</body>
+</html>
