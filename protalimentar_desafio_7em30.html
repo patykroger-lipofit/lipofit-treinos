@@ -40,7 +40,7 @@ header{padding:24px 0 4px;text-align:center}
 .hero h1 b{font-weight:700}
 .hero .meta-linha{display:flex;gap:11px;flex-wrap:wrap;margin-top:18px}
 .hero .meta-item{flex:1;min-width:94px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:13px;padding:11px 12px}
-.hero .meta-item b{display:block;font-weight:600;font-size:1.05rem;line-height:1.1}
+.hero .meta-item b{display:block;font-weight:600;font-size:.98rem;line-height:1.1;letter-spacing:-.3px;white-space:nowrap}
 .hero .meta-item span{display:block;opacity:.78;font-size:.66rem;margin-top:3px;line-height:1.2}
 .menu{display:flex;flex-direction:column;gap:11px}
 .sub-head{font-size:.64rem;letter-spacing:3px;text-transform:uppercase;color:var(--txt3);font-weight:600;margin:18px 0 8px 4px}
@@ -144,9 +144,9 @@ body.veg .chip b{color:var(--veg-claro)}
     <svg viewBox="0 0 800 280" style="width:100%;max-width:480px;display:block;margin:0 auto;color:var(--txt)" role="img" aria-label="Lipofit">
       <title>Lipofit</title>
       <g fill="currentColor">
-        <text id="lf-lip" y="180" text-anchor="end" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">LIP</text>
-        <text id="lf-fit" y="180" text-anchor="start" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">FIT</text>
-        <g id="lf-sym">
+        <text x="345.78" y="180" text-anchor="end" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">LIP</text>
+        <text x="454.23" y="180" text-anchor="start" style="font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:150px">FIT</text>
+        <g transform="translate(400 180) scale(0.383) translate(-225 -225)">
           <circle cx="225" cy="225" r="180" fill="none" stroke="currentColor" stroke-width="6"/>
           <line x1="225" y1="45" x2="225" y2="97.36" stroke="currentColor" stroke-width="6"/>
           <line x1="362" y1="118" x2="333.5" y2="146.98" stroke="currentColor" stroke-width="6"/>
@@ -379,25 +379,6 @@ body.veg .chip b{color:var(--veg-claro)}
 </div>
 
 <script>
-(function(){
-  function alinharLogo(){
-    var lip=document.getElementById('lf-lip'),fit=document.getElementById('lf-fit'),sym=document.getElementById('lf-sym');
-    if(!lip||!fit||!sym)return;
-    try{
-      var svg=lip.ownerSVGElement,NS="http://www.w3.org/2000/svg";
-      var tmp=document.createElementNS(NS,'text');
-      tmp.setAttribute('font-family','Arial,sans-serif');tmp.setAttribute('font-weight','400');
-      tmp.setAttribute('font-size','150');tmp.setAttribute('visibility','hidden');tmp.textContent='O';
-      svg.appendChild(tmp);var oBox=tmp.getBBox();svg.removeChild(tmp);
-      var wO=oBox.width,cy=180+oBox.y+oBox.height/2,scale=wO/283.28;
-      lip.setAttribute('x',(400-wO/2).toFixed(2));fit.setAttribute('x',(400+wO/2).toFixed(2));
-      sym.setAttribute('transform','translate(400 '+cy.toFixed(2)+') scale('+scale.toFixed(3)+') translate(-225 -225)');
-    }catch(e){}
-  }
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){setTimeout(alinharLogo,50);});
-  else setTimeout(alinharLogo,200);
-  setTimeout(alinharLogo,1000);
-})();
 var historico=[];
 function abrir(id){var a=document.querySelector('.tela.ativa');if(a)historico.push(a.id);mostrar(id);}
 function voltar(){mostrar(historico.pop()||'home');}
