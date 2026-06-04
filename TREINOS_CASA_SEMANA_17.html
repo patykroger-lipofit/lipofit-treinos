@@ -94,7 +94,7 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
 .ex-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;gap:14px;padding-bottom:6px;scrollbar-width:none}
 .ex-carousel::-webkit-scrollbar{display:none}
 .ex-carousel-card{flex:0 0 calc(100% - 18px);scroll-snap-align:center;background:var(--card);border:1px solid var(--borda);border-radius:16px;overflow:hidden;transition:opacity .2s}
-.ex-carousel-card.dimmed{filter:brightness(.45) saturate(.7)}
+.ex-carousel-card.dimmed .ex-carousel-card-header,.ex-carousel-card.dimmed .ex-carousel-card-reps{opacity:.45}
 .ex-carousel-card.current{border-color:var(--accent,#fff);box-shadow:0 0 0 1px var(--accent,rgba(255,255,255,.4))}
 .ex-carousel-card-header{padding:14px 18px;border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:10px}
 .ex-carousel-card-tag{font-size:.7rem;color:var(--txt3);letter-spacing:2px;background:rgba(255,255,255,.08);padding:3px 8px;border-radius:4px;font-weight:600}
