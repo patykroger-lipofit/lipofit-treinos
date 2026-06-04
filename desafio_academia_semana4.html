@@ -181,6 +181,8 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
 
 .lipofit-logo-wrap{width:100%;max-width:450px;display:block;margin:0 auto 0;color:var(--txt)}
 .lipofit-logo-wrap svg{width:100%;height:auto;display:block}
+.logo-tagline{font-family:'Poppins',sans-serif;font-size:.85rem;font-weight:500;color:rgba(255,255,255,0.92);letter-spacing:3px;text-transform:uppercase;text-align:center;margin-top:-22px;padding-bottom:8px;line-height:1.4;padding-left:8px;padding-right:8px}
+.header-sub{font-size:0.85rem;letter-spacing:1.5px;font-weight:600;color:rgba(255,255,255,0.9);padding:8px 16px 6px;text-transform:uppercase;line-height:1.6;text-align:center}
 .lipofit-tagline{font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:500;letter-spacing:5px;color:rgba(255,255,255,0.92);text-transform:uppercase;margin-top:-22px;margin-bottom:14px}
 .lipofit-subinfo{font-size:.78rem;letter-spacing:3px;font-weight:600;color:var(--txt3);text-transform:uppercase;margin-bottom:14px}
 .treino-titulo{font-size:1.15rem !important}
@@ -241,9 +243,8 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
       </g>
     </svg>
   </div>
-  <div class="lipofit-tagline">DESAFIO 7 EM 30</div>
-  <div class="lipofit-subinfo">Programa de 30 Dias</div>
-  <div class="header-week">Semana 4 · 5 Treinos</div>
+  <div class="logo-tagline">DESAFIO 7 EM 30 · ACADEMIA</div>
+  <div class="header-sub">SEMANA 4&nbsp;·&nbsp;TRANSFORMA&nbsp;·&nbsp;TREINOS 16 A 20</div>
 </div>
 
 <div id="tela-hub">
@@ -555,9 +556,6 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
     <div style="margin-top:32px;margin-bottom:8px">
       <button class="btn-comecar" onclick="finalizarDia(1)">Finalizar Treino ✓</button>
     </div>
-      <div style="margin-top:32px;margin-bottom:8px">
-        <button class="btn-comecar" onclick="finalizarDia(1)">Finalizar Treino ✓</button>
-      </div>
     </div>
   </div>
 </section>
@@ -829,9 +827,6 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
     <div style="margin-top:32px;margin-bottom:8px">
       <button class="btn-comecar" onclick="finalizarDia(2)">Finalizar Treino ✓</button>
     </div>
-      <div style="margin-top:32px;margin-bottom:8px">
-        <button class="btn-comecar" onclick="finalizarDia(2)">Finalizar Treino ✓</button>
-      </div>
     </div>
   </div>
 </section>
@@ -1094,9 +1089,6 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
     <div style="margin-top:32px;margin-bottom:8px">
       <button class="btn-comecar" onclick="finalizarDia(3)">Finalizar Treino ✓</button>
     </div>
-      <div style="margin-top:32px;margin-bottom:8px">
-        <button class="btn-comecar" onclick="finalizarDia(3)">Finalizar Treino ✓</button>
-      </div>
     </div>
   </div>
 </section>
@@ -1359,9 +1351,6 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
     <div style="margin-top:32px;margin-bottom:8px">
       <button class="btn-comecar" onclick="finalizarDia(4)">Finalizar Treino ✓</button>
     </div>
-      <div style="margin-top:32px;margin-bottom:8px">
-        <button class="btn-comecar" onclick="finalizarDia(4)">Finalizar Treino ✓</button>
-      </div>
     </div>
   </div>
 </section>
@@ -1643,9 +1632,6 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
     <div style="margin-top:32px;margin-bottom:8px">
       <button class="btn-comecar" onclick="finalizarDia(5)">Finalizar Treino ✓</button>
     </div>
-      <div style="margin-top:32px;margin-bottom:8px">
-        <button class="btn-comecar" onclick="finalizarDia(5)">Finalizar Treino ✓</button>
-      </div>
     </div>
   </div>
 </section>
@@ -1790,13 +1776,15 @@ function unlockAudio() {
     o.connect(g); g.connect(audioCtx.destination);
     g.gain.setValueAtTime(0, audioCtx.currentTime);
     o.start(audioCtx.currentTime); o.stop(audioCtx.currentTime + 0.001);
-  } else if (audioCtx.state === 'suspended') {
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
     audioCtx.resume();
   }
 }
 
 function bip(freq, delay, dur, vol = 0.3) {
   if (!audioCtx) return;
+  if (audioCtx.state === 'suspended') { audioCtx.resume(); }
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
   o.connect(g); g.connect(audioCtx.destination);
@@ -2160,7 +2148,7 @@ function mostrarHub(){
   esconderTudo();
   document.getElementById('tela-hub').style.display='block';
   document.getElementById('btnVoltar').classList.remove('visivel');
-  document.querySelector('.header-week').textContent='Semana '+SEMANA_NUM+' · 5 Treinos';
+  /* header-week removido na padronização */
   atualizarHub();
   window.scrollTo({top:0,behavior:'instant'});
 }
@@ -2177,7 +2165,7 @@ function abrirDia(n){
   document.getElementById('dia-'+n+'-inter').style.display='block';
   document.getElementById('dia-'+n+'-treino').style.display='none';
   document.getElementById('btnVoltar').classList.add('visivel');
-  document.querySelector('.header-week').textContent='Semana '+SEMANA_NUM+' · Treino '+n;
+  /* header-week removido na padronização */
   selecionarNivel(nivelAtual);
   window.scrollTo({top:0,behavior:'instant'});
 }
@@ -2193,7 +2181,7 @@ function finalizarDia(n){
   tf.querySelector('h2').textContent='Treino '+n+' concluído!';
   tf.style.display='block';
   document.getElementById('btnVoltar').classList.remove('visivel');
-  document.querySelector('.header-week').textContent='Semana '+SEMANA_NUM+' · Treino '+n;
+  /* header-week removido na padronização */
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function voltarAosTreinos(){ mostrarHub(); }
@@ -2203,7 +2191,7 @@ function voltarTela(){
     var t=document.getElementById('dia-'+diaAtual+'-treino');
     var i=document.getElementById('dia-'+diaAtual+'-inter');
     if(t&&t.style.display==='block'){ t.style.display='none'; i.style.display='block';
-      document.querySelector('.header-week').textContent='Semana '+SEMANA_NUM+' · Treino '+diaAtual;
+      /* header-week removido na padronização */
       window.scrollTo({top:0,behavior:'instant'}); return; }
     mostrarHub(); return;
   }
