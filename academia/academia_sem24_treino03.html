@@ -133,6 +133,8 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
 
 .lipofit-logo-wrap{width:100%;max-width:450px;display:block;margin:0 auto 0;color:var(--txt)}
 .lipofit-logo-wrap svg{width:100%;height:auto;display:block}
+.logo-tagline{font-family:'Poppins',sans-serif;font-size:.85rem;font-weight:500;color:rgba(255,255,255,0.92);letter-spacing:3px;text-transform:uppercase;text-align:center;margin-top:-22px;padding-bottom:8px;line-height:1.4;padding-left:8px;padding-right:8px}
+.header-sub{font-size:0.85rem;letter-spacing:1.5px;font-weight:600;color:rgba(255,255,255,0.9);padding:8px 16px 6px;text-transform:uppercase;line-height:1.6;text-align:center}
 .lipofit-tagline{font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:500;letter-spacing:9px;color:rgba(255,255,255,0.92);text-transform:uppercase;margin-top:-22px;margin-bottom:14px}
 .lipofit-subinfo{font-size:.78rem;letter-spacing:3px;font-weight:600;color:var(--txt3);text-transform:uppercase;margin-bottom:14px}
 .treino-titulo{font-size:1.15rem !important}
@@ -155,7 +157,7 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
 <body>
 
 <div class="header">
-  <button id="btnVoltar" class="btn-voltar visivel" onclick="voltarTela()">
+  <button id="btnVoltar" class="btn-voltar" onclick="voltarTela()">
     <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
     <span>Voltar</span>
   </button>
@@ -176,9 +178,8 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
       </g>
     </svg>
   </div>
-  <div class="lipofit-tagline">ACELERAR</div>
-  <div class="lipofit-subinfo">Trimestre 2 · Hipertrofia</div>
-  <div class="header-week">Semana 24 · TREINO 3</div>
+  <div class="logo-tagline">PROGRAMA COMPLETO · ACADEMIA</div>
+  <div class="header-sub">SEMANA 24&nbsp;·&nbsp;TREINOS 116 A 120</div>
 </div>
 
 <div id="tela-intermediaria">
@@ -458,13 +459,15 @@ function unlockAudio() {
     o.connect(g); g.connect(audioCtx.destination);
     g.gain.setValueAtTime(0, audioCtx.currentTime);
     o.start(audioCtx.currentTime); o.stop(audioCtx.currentTime + 0.001);
-  } else if (audioCtx.state === 'suspended') {
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
     audioCtx.resume();
   }
 }
 
 function bip(freq, delay, dur, vol = 0.3) {
   if (!audioCtx) return;
+  if (audioCtx.state === 'suspended') { audioCtx.resume(); }
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
   o.connect(g); g.connect(audioCtx.destination);
