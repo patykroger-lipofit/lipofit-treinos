@@ -149,14 +149,14 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
 /* GAMIFICAÇÃO */
 .card-progresso-wrap{width:100%;max-width:520px;margin:0 auto;padding:0 20px}
 .card-progresso{background:rgba(255,255,255,0.10);border:1px solid var(--borda);border-radius:14px;padding:14px;margin:14px 0 0}
-.card-progresso-topo{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-progresso-topo{display:flex;align-items:center;justify-content:center;margin-bottom:14px}
 .card-progresso-streak{display:flex;align-items:center;gap:10px}
 .streak-icone{width:40px;height:40px;background:rgba(255,152,0,0.20);border:1px solid rgba(255,152,0,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}
 .streak-numero{font-size:1.1rem;color:var(--txt);font-weight:700;line-height:1}
 .streak-label{font-size:.6rem;color:var(--txt3);letter-spacing:1px;text-transform:uppercase;margin-top:2px;font-weight:600}
-.total-treinos{text-align:right}
-.total-treinos-numero{font-size:1.1rem;color:var(--txt);font-weight:700;line-height:1}
-.total-treinos-label{font-size:.6rem;color:var(--txt3);letter-spacing:1px;text-transform:uppercase;margin-top:2px;font-weight:600}
+.total-treinos{text-align:center}
+.total-treinos-numero{font-size:2rem;color:var(--txt);font-weight:800;line-height:1}
+.total-treinos-label{font-size:.65rem;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-top:4px;font-weight:600}
 .barra-progresso{margin-bottom:10px}
 .barra-progresso:last-child{margin-bottom:0}
 .barra-topo{display:flex;justify-content:space-between;margin-bottom:5px}
@@ -287,13 +287,6 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
 <div class="card-progresso-wrap">
 <div class="card-progresso">
   <div class="card-progresso-topo">
-    <div class="card-progresso-streak">
-      <div class="streak-icone">🔥</div>
-      <div>
-        <div class="streak-numero"><span id="streak-atual">0</span> dias</div>
-        <div class="streak-label">Streak atual</div>
-      </div>
-    </div>
     <div class="total-treinos">
       <div class="total-treinos-numero" id="total-treinos">0</div>
       <div class="total-treinos-label">Treinos feitos</div>
@@ -979,7 +972,6 @@ function contarSemanasCompletas(treinos, semInicio, semFim) {
 function atualizarCardProgresso() {
   const treinos = getTreinos();
   const totalTreinos = treinos.length;
-  const streak = calcularStreak();
 
   const treinosSemana = treinos.filter(t => t.semana === SEMANA_ATUAL);
   const idsSemana = [...new Set(treinosSemana.map(t => t.treinoId))];
@@ -998,7 +990,6 @@ function atualizarCardProgresso() {
   const setText = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
   const setWidth = (id, val) => { const e = document.getElementById(id); if (e) e.style.width = val; };
 
-  setText('streak-atual', streak);
   setText('total-treinos', totalTreinos);
   setText('semana-atual', SEMANA_ATUAL);
   setText('semana-treinos-feitos', treinosSemanaCount);
@@ -1378,7 +1369,6 @@ function mostrarTelaFinalAprimorada() {
 
   const treinos = getTreinos();
   const totalTreinos = treinos.length;
-  const streak = calcularStreak();
 
   const jaDesbloqueadas = getConquistas();
   let proximaConq = null;
@@ -1398,15 +1388,6 @@ function mostrarTelaFinalAprimorada() {
     <div class="tela-final-contador">Este foi seu treino de número</div>
     <div class="tela-final-numero">${totalTreinos}</div>
     <div class="tela-final-numero-label">Treinos concluídos</div>
-    ${streak > 0 ? `
-    <div class="tela-final-streak-card">
-      <div class="tela-final-streak-topo">
-        <div class="tela-final-streak-icone">🔥</div>
-        <div class="tela-final-streak-texto">Streak: ${streak} dia${streak > 1 ? 's' : ''} seguido${streak > 1 ? 's' : ''}</div>
-      </div>
-      <div class="tela-final-streak-descricao">Continue mantendo o ritmo para desbloquear novas conquistas.</div>
-    </div>
-    ` : ''}
     ${proximaConq ? `
     <div class="tela-final-proxima">
       <div class="tela-final-proxima-label">Próxima conquista</div>
