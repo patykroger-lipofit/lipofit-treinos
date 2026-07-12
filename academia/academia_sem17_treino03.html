@@ -25,7 +25,7 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
 .header-prog{font-size:.65rem;letter-spacing:3px;font-weight:600;color:var(--txt3);text-transform:uppercase;margin-bottom:14px}
 .header-week{display:inline-block;padding:6px 18px;background:rgba(255,255,255,0.12);border-radius:20px;border:1px solid var(--borda);font-size:.75rem;font-weight:600;letter-spacing:2px;color:var(--txt2);text-transform:uppercase}
 
-.btn-voltar{position:absolute;top:20px;left:16px;background:rgba(255,255,255,0.08);border:1px solid var(--borda);color:var(--txt);padding:8px 14px;border-radius:8px;font-size:.75rem;font-weight:500;cursor:pointer;font-family:'Poppins',sans-serif;display:none;align-items:center;gap:6px}
+.btn-voltar{position:absolute;top:20px;left:16px;background:rgba(255,255,255,0.08);border:1px solid var(--borda);color:var(--txt);padding:8px 14px;border-radius:8px;font-size:.75rem;font-weight:500;cursor:pointer;font-family:'Poppins',sans-serif;display:flex;align-items:center;gap:6px}
 .btn-voltar:active{background:rgba(255,255,255,0.18)}
 .btn-voltar.visivel{display:flex}
 .btn-voltar svg{width:14px;height:14px;fill:currentColor}
@@ -1181,8 +1181,8 @@ function ehFimDeMes(treinos) {
   if (!semanasFimDeMes.includes(SEMANA_ATUAL)) return null;
 
   const semAtual = SEMANA_ATUAL;
-  const semanasCompletasAno = contarSemanasCompletas(treinos, 1, semAtual);
-  if (semanasCompletasAno < semAtual) return null;
+  const idsDaSemanaMes = [...new Set(treinos.filter(t => t.semana === SEMANA_ATUAL).map(t => t.treinoId))];
+  if (idsDaSemanaMes.length < 5) return null;
 
   // Calcular qual mês é (1, 2, 4, 5, 7, 8, 10, 11)
   const mesMap = {4: 1, 8: 2, 16: 4, 20: 5, 28: 7, 32: 8, 40: 10, 44: 11};
@@ -1195,8 +1195,8 @@ function ehFimDeTrimestre(treinos) {
   const semanasFimTri = [12, 24, 36, 48];
   if (!semanasFimTri.includes(SEMANA_ATUAL)) return null;
 
-  const semanasCompletas = contarSemanasCompletas(treinos, 1, SEMANA_ATUAL);
-  if (semanasCompletas < SEMANA_ATUAL) return null;
+  const idsDaSemanaTri = [...new Set(treinos.filter(t => t.semana === SEMANA_ATUAL).map(t => t.treinoId))];
+  if (idsDaSemanaTri.length < 5) return null;
 
   return {tri: TRIMESTRE_ATUAL, nome: TRIMESTRE_NOME};
 }
@@ -1497,6 +1497,43 @@ if (document.readyState === 'loading') {
   atualizarCardProgresso();
 }
 
+
+// ==================== v8: BOTAO VOLTAR AO HUB + REFRESH ====================
+const HUB_URL = '../TREINOS_ACADEMIA_SEMANA_17.html';
+
+function labelBtnVoltar(txt) {
+  const b = document.getElementById('btnVoltar');
+  if (!b) return;
+  b.classList.add('visivel');
+  const s = b.querySelector('span');
+  if (s) s.textContent = txt;
+}
+const LABEL_HUB = 'Semana ' + SEMANA_ATUAL;
+
+// Toda tela de gamificacao passa por esconderTodasTelas -> label vira "Semana X"
+const _esconderTodasTelasOrig = esconderTodasTelas;
+esconderTodasTelas = function() { _esconderTodasTelasOrig(); labelBtnVoltar(LABEL_HUB); };
+
+// Dentro do treino o botao volta pra tela inicial do treino
+const _comecarTreinoOrig = comecarTreino;
+comecarTreino = function() { _comecarTreinoOrig(); labelBtnVoltar('Voltar'); };
+
+window.voltarTela = function() {
+  const telaTreino = document.getElementById('tela-treino');
+  if (telaTreino && telaTreino.style.display === 'block') {
+    telaTreino.style.display = 'none';
+    document.getElementById('tela-intermediaria').classList.remove('hidden');
+    labelBtnVoltar(LABEL_HUB);
+    window.scrollTo({top: 0, behavior: 'instant'});
+    return;
+  }
+  window.location.href = HUB_URL;
+};
+
+labelBtnVoltar(LABEL_HUB);
+
+// Se a aluna volta pra esta pagina (bfcache), recalcula o card de progresso
+window.addEventListener('pageshow', function() { atualizarCardProgresso(); });
 </script>
 </body>
 </html>
