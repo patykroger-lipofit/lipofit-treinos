@@ -245,6 +245,11 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1
   } else {
     atualizarHub();
   }
+  // v8: recalcula ao voltar do treino (bfcache) e ao reabrir a aba
+  window.addEventListener('pageshow', atualizarHub);
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) atualizarHub();
+  });
 })();
 </script>
 </body>
